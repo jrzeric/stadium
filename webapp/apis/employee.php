@@ -3,16 +3,16 @@
 	header('Access-Control-Allow-Origin: *');
 	//allow methods
 	header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-	
+
 	//allow headers
 	//header('Access-Control-Allow-Headers: username, token');
 	//use files
-	
 
 
-	require_once($_SERVER['DOCUMENT_ROOT'].'/estadium/models/employee.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/estadium/models/role.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/estadium/security/security.php');
+
+	require_once($_SERVER['DOCUMENT_ROOT'].'/stadium/webapp/models/employee.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/stadium/webapp/models/role.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/stadium/webapp/security/security.php');
 
 	//validate token
 	/*
@@ -23,7 +23,7 @@
 				'status' => 2,
 				'errorMessage' => 'Invalid security headers'
 			));
-			die(); //en process		
+			die(); //en process
 		}
 	}
 	else {
@@ -56,10 +56,10 @@
 		else {
 			echo Employee::getAllJson();
 		}
-		
+
 	}
 	//POST
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') 
+	if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		//check parameters
 		if (isset($_POST['nombre']) &&
@@ -71,11 +71,11 @@
 				//validation
 				$error = false;
 				//building type
-				try 
+				try
 				{
 					$role = new Role($_POST['role']);
 				}
-				catch(RecordNotFoundException $ex) 
+				catch(RecordNotFoundException $ex)
 				{
 					$error = true; //found error
 					echo json_encode(array(
@@ -83,7 +83,7 @@
 						'errorMessage' => 'Invalid role'
 					));
 				}
-				if (!$error) 
+				if (!$error)
 				{
 					//create building object
 					$e = new Employee();
@@ -106,7 +106,7 @@
 							'status' => 3,
 							'errorMessage' => 'Could not add building'
 						));
-						
+
 				}
 			}
 		else
@@ -114,8 +114,8 @@
 				'status' => 1,
 				'errorMessage' => 'Missing Parameters'
 			));
-			
-		
+
+
 	}
 	//PUT
 	if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -152,7 +152,7 @@
 						$b->setLocation(new Location($jsonData['latitude'], $jsonData['longitude']));
 						$b->setType($bt);
 						//edit
-						if ($b->edit()) 
+						if ($b->edit())
 							echo json_encode(array(
 								'status' => 0,
 								'errorMessage' => 'Building edited successfully'
@@ -182,18 +182,9 @@
 				'status' => 1,
 				'errorMessage' => 'Missing data parameter'
 			));
-	} 
+	}
 	//DELETE
 	if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
 		echo 'DELETE';
 	}
 ?>
-
-
-
-
-
-
-
-
-
