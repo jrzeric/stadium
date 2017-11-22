@@ -1,6 +1,7 @@
 -- Sql
 USE [master];
-GO 
+GO
+DROP DATABASE IF EXISTS [seatOrganizer];
 CREATE DATABASE [seatOrganizer];
 GO
 USE [seatOrganizer];
@@ -23,14 +24,26 @@ CREATE TABLE [catalogo].[secciones_ctg](
 	id CHAR(2) NOT NULL,
 	area CHAR(3) NOT NULL,
 	nombre VARCHAR(20) NOT NULL,
-	CONSTRAINT PK_SeccionesCtg PRIMARY KEY (id, area),
+	CONSTRAINT PK_SeccionesCtg PRIMARY KEY (id),
 	CONSTRAINT FK_AreasCtg FOREIGN KEY(area) REFERENCES [catalogo].[areas_ctg](id)
+);
+CREATE TABLE [catalogo].[butacas_ctg](
+	id INT NOT NULL,
+	fila CHAR(1) NOT NULL,
+	columna VARCHAR(3) NOT NULL,
+	seccion CHAR(2) NOT NULL,
+	area CHAR(3) NOT NULL,
+	status CHAR(2) NOT NULL,
+	CONSTRAINT PK_ButacasCtg PRIMARY KEY (id),
+	CONSTRAINT FK_ButacasCtg_SeccionesCtg FOREIGN KEY (seccion) REFERENCES [catalogo].[secciones_ctg] (id),
+	CONSTRAINT FK_ButacasCtg_AreasCtg FOREIGN KEY (area) REFERENCES [catalogo].[areas_ctg] (id)
 );
 CREATE TABLE [admin].[eventos](
 	id INT NOT NULL IDENTITY(1,1),
 	nombre VARCHAR(20) NOT NULL,
 	fecha DATETIME NOT NULL,
 	descripcion VARCHAR(120) NOT NULL,
+	imagen VARCHAR(254),
 	CONSTRAINT PK_Eventos PRIMARY KEY(id),
 	CONSTRAINT CHK_Eventos_fecha CHECK(fecha = GETDATE())
 );
@@ -41,7 +54,8 @@ CREATE TABLE [admin].[precios](
 	precio DECIMAL(7, 2) NOT NULL,
 	CONSTRAINT PK_Precios PRIMARY KEY(evento, area, seccion),
 	CONSTRAINT FK_Precios_Eventos FOREIGN KEY(evento) REFERENCES [admin].[eventos](id),
-	CONSTRAINT FK_Precios_SeccionesCtg FOREIGN KEY(seccion, area) REFERENCES [catalogo].[secciones_ctg](id, area),
+	CONSTRAINT FK_Precios_SeccionesCtg FOREIGN KEY(seccion) REFERENCES [catalogo].[secciones_ctg](id),
+	CONSTRAINT FK_ButacasCtg_AreasCtg FOREIGN KEY (area) REFERENCES [catalogo].[areas_ctg] (id),
 	CONSTRAINT CHK_Precios_precio CHECK(precio < 5000)
 );
 CREATE TABLE [admin].[empleados](
@@ -68,11 +82,11 @@ CREATE TABLE [ventas].[boletos](
 	evento INT NOT NULL,
 	area CHAR(3) NOT NULL,
 	seccion CHAR(2) NOT NULL,
-	butaca VARCHAR(5) NOT NULL,
+	butaca INT NOT NULL,
 	CONSTRAINT PK_Boletos PRIMARY KEY(folio, evento, area, seccion, butaca),
-	CONSTRAINT FK_Boletos_Ventas FOREIGN KEY(venta) REFERENCES [ventas].[ventas](numero),
-	CONSTRAINT FK_Boletos_Eventos FOREIGN KEY(evento) REFERENCES [admin].[eventos](id),
-	CONSTRAINT FK_Boletos_SeccionesCtg FOREIGN KEY(seccion, area) REFERENCES [catalogo].[secciones_ctg](id, area),
+	CONSTRAINT FK_Boletos_Ventas FOREIGN KEY (venta) REFERENCES [ventas].[ventas] (numero),
+	CONSTRAINT FK_Boletos_Eventos FOREIGN KEY (evento) REFERENCES [admin].[eventos] (id),
+	CONSTRAINT FK_Boletos_ButacasCtg FOREIGN KEY (butaca) REFERENCES [catalogo].[butacas_ctg] (id),
 	CONSTRAINT UQ_Boletos_folio UNIQUE(folio)
 );
 CREATE TABLE [admin].[perfiles_ctg](
@@ -126,6 +140,11 @@ GRANT SELECT ON OBJECT::[ventas].[ventas] TO Administrador
 GRANT UPDATE ON OBJECT::[ventas].[ventas] TO Administrador
 GRANT INSERT ON OBJECT::[ventas].[ventas] TO Administrador
 
+--Permisos de la tabla butacas
+GRANT SELECT ON OBJECT::[catalogo].[butacas_ctg] TO Administrador;
+GRANT UPDATE ON OBJECT::[catalogo].[butacas_ctg] TO Administrador;
+GRANT INSERT ON OBJECT::[catalogo].[butacas_ctg] TO Administrador;
+
 CREATE ROLE VendedorBoletos
 
 --Permisos de la tabla boletos
@@ -144,6 +163,22 @@ GRANT SELECT ON OBJECT::[catalogo].[areas_ctg] TO VendedorBoletos
 --Permisos de la tabla de usuarios
 GRANT SELECT ON OBJECT::[catalogo].[secciones_ctg] TO VendedorBoletos
 
+--Permisos de la tabla butacas
+GRANT SELECT ON OBJECT::[catalogo].[butacas_ctg] TO VendedorBoletos;
+
+
+
+
+-- Crear logins
+CREATE LOGIN admin WITH PASSWORD = 'admin', DEFAULT_DATABASE = [seatOrganizer];
+CREATE LOGIN seller WITH PASSWORD = 'abc123', DEFAULT_DATABASE = [seatOrganizer];
+
+-- Crear usuarios
+CREATE USER admin FOR LOGIN admin;
+CREATE USER seller FOR LOGIN seller;
+
+ALTER ROLE Administrador ADD MEMBER admin;
+ALTER ROLE VendedorBoletos ADD MEMBER seller;
 
 GO
 go
@@ -180,7 +215,7 @@ begin
 		set @respuesta = 'Registro exitoso'
     end try
     begin catch
-        set @respuesta = error_message() 
+        set @respuesta = error_message()
     end catch
 end
 GO
@@ -204,12 +239,12 @@ begin
 	-- Valida si existe un usuario bajo el nombre de usuario indicado
     if exists (select top 1 empleado from admin.usuarios where nombre = @usuario)
     begin
-		-- Se asigna el 'id' del usuario que haga 'match' entre usuario y (contrasena + 'salt') encriptada 
+		-- Se asigna el 'id' del usuario que haga 'match' entre usuario y (contrasena + 'salt') encriptada
 		set @id = (select empleado from admin.usuarios where nombre = @usuario and contrasena = hashbytes('sha1', @contrasena))
 		if(@id is not null)
 			set @respuesta = 'Acceso autorizado'
 		else
-			set @respuesta = 'Usuario o contraseña incorrecto'
+			set @respuesta = 'Usuario o contraseï¿½a incorrecto'
     end
 end
 GO
@@ -228,8 +263,8 @@ select control, apPaterno, apMaterno, nombre, fechaContratacion
 from admin.empleados
 where control = 100
 
-select perfil, nombre, status 
-from admin.usuarios 
+select perfil, nombre, status
+from admin.usuarios
 where empleado = 100
 
 select * from admin.perfiles_ctg
