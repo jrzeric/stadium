@@ -32,11 +32,9 @@ CREATE TABLE [catalogo].[butacas_ctg](
 	fila CHAR(1) NOT NULL,
 	columna VARCHAR(3) NOT NULL,
 	seccion CHAR(2) NOT NULL,
-	area CHAR(3) NOT NULL,
 	status CHAR(2) NOT NULL,
 	CONSTRAINT PK_ButacasCtg PRIMARY KEY (id),
 	CONSTRAINT FK_ButacasCtg_SeccionesCtg FOREIGN KEY (seccion) REFERENCES [catalogo].[secciones_ctg] (id),
-	CONSTRAINT FK_ButacasCtg_AreasCtg FOREIGN KEY (area) REFERENCES [catalogo].[areas_ctg] (id)
 );
 CREATE TABLE [admin].[eventos](
 	id INT NOT NULL IDENTITY(1,1),
@@ -49,13 +47,11 @@ CREATE TABLE [admin].[eventos](
 );
 CREATE TABLE [admin].[precios](
 	evento INT NOT NULL,
-	area CHAR(3) NOT NULL,
 	seccion CHAR(2) NOT NULL,
 	precio DECIMAL(7, 2) NOT NULL,
-	CONSTRAINT PK_Precios PRIMARY KEY(evento, area, seccion),
+	CONSTRAINT PK_Precios PRIMARY KEY(evento, seccion),
 	CONSTRAINT FK_Precios_Eventos FOREIGN KEY(evento) REFERENCES [admin].[eventos](id),
 	CONSTRAINT FK_Precios_SeccionesCtg FOREIGN KEY(seccion) REFERENCES [catalogo].[secciones_ctg](id),
-	CONSTRAINT FK_ButacasCtg_AreasCtg FOREIGN KEY (area) REFERENCES [catalogo].[areas_ctg] (id),
 	CONSTRAINT CHK_Precios_precio CHECK(precio < 5000)
 );
 CREATE TABLE [admin].[empleados](
@@ -70,22 +66,20 @@ CREATE TABLE [admin].[empleados](
 );
 CREATE TABLE [ventas].[ventas](
 	numero CHAR(12) NOT NULL,
+	evento INT NOT NULL,
 	fechaHora DATETIME NOT NULL DEFAULT GETDATE(),
 	vendedor smallint NOT NULL,
 	CONSTRAINT PK_Ventas PRIMARY KEY(numero),
 	CONSTRAINT FK_Ventas_Empleados FOREIGN KEY(vendedor) REFERENCES [admin].[empleados](control),
-	CONSTRAINT CHK_Boletos_fechaHora CHECK(fechaHora = GETDATE())
+	CONSTRAINT FK_Ventas_Eventos FOREIGN KEY (evento) REFERENCES [admin].[eventos] (id),
+	CONSTRAINT CHK_Ventas_fechaHora CHECK(fechaHora = GETDATE())
 );
 CREATE TABLE [ventas].[boletos](
 	folio VARCHAR(20) NOT NULL,
 	venta CHAR(12) NOT NULL,
-	evento INT NOT NULL,
-	area CHAR(3) NOT NULL,
-	seccion CHAR(2) NOT NULL,
 	butaca INT NOT NULL,
-	CONSTRAINT PK_Boletos PRIMARY KEY(folio, evento, area, seccion, butaca),
+	CONSTRAINT PK_Boletos PRIMARY KEY(folio),
 	CONSTRAINT FK_Boletos_Ventas FOREIGN KEY (venta) REFERENCES [ventas].[ventas] (numero),
-	CONSTRAINT FK_Boletos_Eventos FOREIGN KEY (evento) REFERENCES [admin].[eventos] (id),
 	CONSTRAINT FK_Boletos_ButacasCtg FOREIGN KEY (butaca) REFERENCES [catalogo].[butacas_ctg] (id),
 	CONSTRAINT UQ_Boletos_folio UNIQUE(folio)
 );
