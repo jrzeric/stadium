@@ -17,13 +17,13 @@ GO
 CREATE TABLE [catalogo].[areas_ctg](
 	id CHAR(3) NOT NULL,
 	nombre VARCHAR(20) NOT NULL,
-	color CHAR(7) NOT NULL,
 	CONSTRAINT PK_AreasCtg PRIMARY KEY (id)
 );
 CREATE TABLE [catalogo].[secciones_ctg](
-	id CHAR(2) NOT NULL,
+	id TINYINT NOT NULL,
 	area CHAR(3) NOT NULL,
 	nombre VARCHAR(20) NOT NULL,
+	color CHAR(7) NOT NULL,
 	CONSTRAINT PK_SeccionesCtg PRIMARY KEY (id),
 	CONSTRAINT FK_AreasCtg FOREIGN KEY(area) REFERENCES [catalogo].[areas_ctg](id)
 );
@@ -31,7 +31,7 @@ CREATE TABLE [catalogo].[butacas_ctg](
 	id INT NOT NULL,
 	fila CHAR(1) NOT NULL,
 	columna VARCHAR(3) NOT NULL,
-	seccion CHAR(2) NOT NULL,
+	seccion TINYINT NOT NULL,
 	status CHAR(2) NOT NULL,
 	CONSTRAINT PK_ButacasCtg PRIMARY KEY (id),
 	CONSTRAINT FK_ButacasCtg_SeccionesCtg FOREIGN KEY (seccion) REFERENCES [catalogo].[secciones_ctg] (id),
@@ -47,7 +47,7 @@ CREATE TABLE [admin].[eventos](
 );
 CREATE TABLE [admin].[precios](
 	evento INT NOT NULL,
-	seccion CHAR(2) NOT NULL,
+	seccion TINYINT NOT NULL,
 	precio DECIMAL(7, 2) NOT NULL,
 	CONSTRAINT PK_Precios PRIMARY KEY(evento, seccion),
 	CONSTRAINT FK_Precios_Eventos FOREIGN KEY(evento) REFERENCES [admin].[eventos](id),
@@ -92,7 +92,7 @@ CREATE TABLE [admin].[usuarios](
 	empleado SMALLINT NOT NULL,
 	perfil CHAR(2) NOT NULL,
 	nombre VARCHAR(15) NOT NULL,
-	contrasena VARCHAR(50) NOT NULL,
+	contrasena VARCHAR(99) NOT NULL,
 	status CHAR(2) NOT NULL DEFAULT 'UP',
 	CONSTRAINT PK_Usuarios PRIMARY KEY(empleado),
 	CONSTRAINT FK_Usuarios_PerfilesCtg FOREIGN KEY(perfil) REFERENCES [admin].[perfiles_ctg](clave),
@@ -184,28 +184,49 @@ GO
 
 -- Creacion del SP
 create procedure usp_iUsuarios
-    @usuario varchar(15),
-    @contrasena varchar(20),
+		@apPaterno varchar(25),
     @apMaterno varchar(25),
-    @apPaterno varchar(25),
     @nombre varchar(25),
+    @contrasena varchar(20),
     @perfil char(2),
     @respuesta nvarchar(250) output
 as
 begin
     set nocount on
+		declare @usuario varchar(15)
 
     begin try
-		-- Primero inserta al empleado
-		INSERT INTO ADMIN.empleados(apPaterno, apMaterno, nombre, status, fechaContratacion) values
-		(@apPaterno, @apMaterno, @nombre, 'UP', GETDATE());
+		-- INSERTA EL EMPLEADO
+		if (@apMaterno != '') -- Si ingresó apMaterno
+			INSERT INTO [admin].[empleados](apPaterno, apMaterno, nombre, status, fechaContratacion) values
+			(@apPaterno, @apMaterno, @nombre, 'UP', GETDATE());
+		else -- Si no ingresó apMaterno
+			INSERT INTO [admin].[empleados](apPaterno, nombre, status, fechaContratacion) values
+			(@apPaterno, @nombre, 'UP', GETDATE());
+
 		--Luego buscamos el ID del empleado que se acaba de insertar
 		declare @newID int = 0;
 		SELECT @newID += @@IDENTITY;
 		--select @newID;
 		--Inserta al usuario
-		insert into admin.usuarios (empleado, perfil ,nombre, contrasena, status) values
-		(@newID, @perfil ,@usuario, hashbytes('sha1', @contrasena), 'UP')
+
+		-- Genera nombre de usuario automaticamente, tomado del nombre completo del empleado
+		set @usuario = concat(substring(@nombre, 1, 1), @apPaterno)
+		if exists (select nombre from [admin].[usuarios] where nombre = @usuario)
+		begin
+			set @usuario = concat(substring(@nombre, 1, 1), @apPaterno, substring(@apMaterno, 1, 1))
+			if exists (select nombre from [admin].[usuarios] where nombre = @usuario)
+			begin
+				declare @contador tinyint
+
+				select @contador = count(nombre) from [admin].[usuarios] where nombre = @usuario;
+				set @contador = @contador + 1;
+				set @usuario = concat(substring(@nombre, 1, 1), @apPaterno, substring(@apMaterno, 1, 1), cast(@contador as varchar(2)))
+			end
+		end
+
+		insert into [admin].[usuarios] (empleado, perfil ,nombre, contrasena, status) values
+		(@newID, @perfil , lower(@usuario), hashbytes('sha1', @contrasena), 'UP')
 		set @respuesta = 'Registro exitoso'
     end try
     begin catch
@@ -214,8 +235,11 @@ begin
 end
 GO
 
+-- apPaterno, apMaterno, nombres, nombreUsuario, contrasena, perfil, @respuesta output
 declare @respuesta varchar(250)
-exec usp_iUsuarios 'ejemplo', '1234567', 'ejemplo', 'ejemplote', 'ejemplito','VB', @respuesta output
+exec usp_iUsuarios 'Juarez', 'Cendejas', 'Eric Luis', 'admin','VB', @respuesta output
+exec usp_iUsuarios 'Galvan', '', 'Martin', 'admin','VB', @respuesta output
+exec usp_iUsuarios 'Chavez', 'Romero', 'Enrique', 'admin','VB', @respuesta output
 select respuesta = @respuesta
 
 GO
@@ -231,10 +255,10 @@ begin
     set nocount on
     declare @id int
 	-- Valida si existe un usuario bajo el nombre de usuario indicado
-    if exists (select top 1 empleado from admin.usuarios where nombre = @usuario)
+    if exists (select top 1 empleado from [admin].[usuarios] where nombre = @usuario)
     begin
 		-- Se asigna el 'id' del usuario que haga 'match' entre usuario y (contrasena + 'salt') encriptada
-		set @id = (select empleado from admin.usuarios where nombre = @usuario and contrasena = hashbytes('sha1', @contrasena))
+		set @id = (select empleado from [admin].[usuarios] where nombre = @usuario and contrasena = hashbytes('sha1', @contrasena))
 		if(@id is not null)
 			set @respuesta = 'Acceso autorizado'
 		else
@@ -244,7 +268,9 @@ end
 GO
 -- SP en accion
 declare @respuesta varchar(250)
-exec usp_sUsuarios 'ejemplo', '1234567', @respuesta out
+exec usp_sUsuarios 'ejuarez', 'admin', @respuesta out
+exec usp_sUsuarios 'mgalvan', 'admin', @respuesta out
+exec usp_sUsuarios 'echavez', 'admin', @respuesta out
 select respuesta = @respuesta
 GO
 
