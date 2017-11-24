@@ -1,0 +1,36 @@
+.area1, .area3, .area5, .area7 {
+  fill:#D180E5;
+  stroke:#530666;
+  stroke-width:2;
+  stroke-miterlimit:10;
+}
+.area1:hover, .area3:hover, .area5:hover, .area7:hover {
+  fill: #bb45d9;
+}
+.area1:active, .area3:active, .area5:active, .area7:active {
+  fill:#a729c7;
+}
+.area4, .area8 {
+  fill:#477BD6;
+  stroke:#15004F;
+  stroke-width:2;
+  stroke-miterlimit:10;
+}
+.area4:hover, .area8:hover {
+  fill: #326dd2;
+}
+.area4:active, .area8:active {
+  fill: #1f488e;
+}
+.area2, .area6 {
+  fill:#CE112C;
+  stroke:#5B0617;
+  stroke-width:2;
+  stroke-miterlimit:10;
+}
+.area2:hover, .area6:hover {
+  fill:#b80f28;
+}
+.area2:active, .area6:active {
+  fill:#a50d24;
+}
