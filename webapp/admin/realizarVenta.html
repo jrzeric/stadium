@@ -7,74 +7,83 @@
   <link href="css/lightsideflat.css" rel="stylesheet"></link>
   <link href="css/style.css" rel="stylesheet"></link>
   <link href="css/event.css" rel="stylesheet"></link>
+  <link rel="stylesheet" href="css/stadiumsvg.css">
+  <link rel="stylesheet" href="css/stadiumchart.css">
   <script src="js/index.js"></script>
+  <script src="js/stadium.js"></script>
 </head>
 <body>
-	<nav class="menu">
-	<h2>Seat Organizer</h2>
-		<table id="users">
-			<tr>
-				<td rowspan="2"><img class="icon" src="../photos/jssmith.jpg"></img></td>
-				<td id="username">Eric</td>
-				<td rowspan="2"><button onClick="logout()">Salir</button</td>
-			</tr>
-			<tr>
-				<td id="userrole">Administrador</td>
-			</tr>
-		</table>
-	</nav>
-	<div id="sidemenu">
-		<ul>
-			<li><a href="index.html">Inicio</a></li>
-			<li><h4>Eventos</h4>
-				<ul>
-				<li><a href="nuevoEvento.html">Nuevo Evento</a></li>
-				<li><a href="modificarEvento.html">Modificar Evento</a></li>
-				</ul>
-			</li>
-			<li><h4>Ventas</h4>
-				<ul>
-				<li><a href="realizarVenta.html">Realizar Venta</a></li>
-				<li><a href="buscarModificarVenta.html">Buscar y/o modificar Venta</a></li>
-				</ul>
-			</li>
-			<li><h4>Usuarios</h4>
-				<ul>
-				<li><a href="agregarUsuario.html">Agregar Usuario</a></li>
-				<li><a href="modificarUsuario.html">Modificar Usuario</a></li>
-				</ul>
-			</li>
-		</ul>
-	</div>
-	<div id="content">
 	<h1>Realizar Nueva Venta</h1>
 		<div class="form">
 			<label>Evento: </label>
 			<select>
 				<option>Seleccionar Evento...</option>
 			</select>
-			<label>Area: </label>
-			<select>
-				<option>Seleccionar Area...</option>
-			</select>
-			<label>Seccion: </label>
-			<select>
-				<option>Seleccionar Seccion...</option>
-			</select>
-			<label>Precio: </label>
-			<select>
-				<option>Seleccionar Precio...</option>
-			</select>
-			<label>Cantidad de Boletos: </label>
-			<input type="number" name="" placeholder=""></input>
 		</div>
 		<div class="formmessage">
 			<label id="message"></label>
 		</div>
-		<div class="formbuttons">
+		<div id="svg">
+			  <svg>
+				<polyline id="area1" class="area1" onclick="mostrarButacas()" onmouseover="precios(10,32,25)" points="190.561,199.469
+					178.982,200.963 167.402,208.807 160.678,217.025 149.099,209.554 146.484,217.025 118.282,207.687 115.107,217.025 80.928,211.982
+					86.718,196.481 9.77,177.43 32.556,126.256 51.979,98.988 74.392,76.576 100.166,57.152 128.554,44.451 142.319,38.35
+					155.449,91.517 163.293,90.023 169.643,123.641 174.126,122.147 190.561,199.469 "/>
+				  <polygon id="area2" class="area2" onclick="mostrarButacas()" points="142.319,38.35 
+					155.449,91.517 163.293,90.023 169.643,123.641 174.126,122.147 190.561,199.469 201.515,194.984 227.166,190.503 252.568,188.013
+					278.466,185.838 303.867,186.9 331.758,186.9 354.917,187.394 382.808,190.07 408.208,194.147 421.22,197.306 435.85,123.058
+					440.644,124.408 448.301,88.725 455.772,90.588 466.791,37.357 438.838,27.644 405.718,21.666 372.1,19.158 338.98,16.9
+					304.863,16.9 271.743,17.726 237.876,18.575 203.76,22.113 171.635,28.986 "/>
+				  <polygon id="area3" class="area3" onclick="mostrarButacas()" points="466.791,37.354
+					455.772,90.583 448.301,88.715 440.644,124.388 435.85,123.018 421.22,197.228 433.36,200.403 444.005,207.687 452.036,225.243
+					498.498,215.851 527.117,211.422 522.635,194.8 599.023,174.629 594.914,161.928 584.081,136.528 568.953,111.314 548.409,86.287
+					523.755,65.743 496.674,48.187 "/>
+					<g id="area4">
+					  <polygon id="area4" class="area4" onclick="mostrarButacas()" points="464.477,342.284
+						494.433,353.517 497.981,342.049 528.051,346.68 526.508,211.441 494.895,216.278 494.895,244.9 466.978,244.9 "/>
+					  <polygon id="area4" class="area4" onclick="mostrarButacas()" points="560.895,341.132
+						574.895,341.973 574.895,215.157 560.895,215.904 "/>
+					</g>
+				  <polygon id="area5" class="area5" onclick="mostrarButacas()" points="599.77,383.435
+					522.635,363.264 528.051,346.642 497.981,341.973 494.433,353.366 464.456,341.973 462.309,350.938 449.048,343.28 443.819,352.992
+					432.852,359.716 421.033,361.583 435.881,436.664 441.717,434.796 451.826,485.224 458.748,483.356 467.906,521.581
+					496.581,509.971 525.156,492.508 549.654,471.029 569.576,447.248 584.517,422.096 594.478,397.443 "/>
+				  <polygon id="area6" class="area6" onclick="mostrarButacas()" points="421.033,361.583
+					435.881,436.664 441.717,434.796 451.826,485.224 458.748,483.356 467.906,521.581 438.96,531.169 406.277,537.332 372.099,541.254
+					338.855,544.011 305.224,544.9 271.992,544.9 238.187,542.517 204.942,537.963 171.698,532.138 143.682,523.155 155.636,469.731
+					162.173,471.221 169.83,436.106 173.939,436.852 190.188,362.891 201.954,365.506 227.541,369.054 254.623,372.603 277.782,374.284
+					305.224,375.217 330.824,373.723 357.158,371.482 382.372,369.241 407.959,364.385 "/>
+				  <polygon id="area7" class="area7" onclick="mostrarButacas()" points="190.188,362.891
+					180.296,407.917 173.939,436.851 169.83,436.104 162.173,471.216 155.636,469.722 143.682,523.138 114.111,510.749 85.473,494.562
+					61.069,473.644 40.649,450.236 25.209,424.836 14.75,398.439 10.019,385.241 87.465,365.07 81.862,348.696 114.558,344.239
+					118.656,353.179 145.924,344.214 148.725,352.121 161.176,345.397 166.157,352.868 176.367,359.591 "/>
+					<g id="area8" onclick="mostrarButacas()">
+					  <polygon id="XMLID_6_" class="area8" onclick="mostrarButacas()" points="33.895,344.214
+						48.727,343.405 48.501,218.332 33.895,217.212 "/>
+					  <polygon id="XMLID_9_" class="area8"  points="81.862,348.696
+						114.547,344.214 118.656,353.179 145.924,344.214 144.616,317.506 144.056,243.359 146.484,217.025 118.282,207.687
+						115.107,217.212 80.928,211.982 "/>
+					</g>
+				  <rect id="XMLID_8_" x="177.861" y="221.383" style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" width="256.246" height="117.539"/>
+				  <rect id="XMLID_10_" x="173.379" y="217.025" style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" width="264.961" height="126.131"/>
+				  <rect id="XMLID_11_" x="182.592" y="226.363" style="fill:#15004F;stroke:#040021;stroke-width:2;stroke-miterlimit:10;" width="19.922" height="108.574"/>
+				  <rect id="XMLID_12_" x="409.951" y="226.363" style="fill:#15004F;stroke:#040021;stroke-width:2;stroke-miterlimit:10;" width="19.673" height="108.574"/>
+				  <rect id="XMLID_13_" x="202.514" y="226.363" style="fill:#17913C;stroke:#003F04;stroke-width:2;stroke-miterlimit:10;" width="207.437" height="108.574"/>
+				  <polygon id="XMLID_14_" style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" points="268.879,216.9
+					275.478,203.9 336.24,203.9 342.964,216.9 "/>
+				  <polygon id="XMLID_15_" style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" points="264.148,216.9
+					272.739,199.9 338.481,199.9 348.193,216.9 "/>
+				  <g id="XMLID_18_">
+					<polygon id="XMLID_17_" style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" points="342.715,342.9
+						336.116,355.9 275.354,355.9 268.63,342.9 	"/>
+					<polygon id="XMLID_16_" style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;" points="347.446,342.9
+						338.855,359.9 273.113,359.9 263.401,342.9 	"/>
+				  </g>
+			  </svg>
+    </div>
+	<div class="formbuttons">
 			<button class="ok" onclick="confirmar()">Ok</button><br><br>
 			<button class="cancel">Cancel</button>
 		</div>
-	</div>
 </body>
 </html>

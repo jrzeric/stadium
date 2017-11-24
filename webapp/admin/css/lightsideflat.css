@@ -45,4 +45,41 @@
 	float: left;
 	position: absolute;
 }
+input[name=search] {
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
 
+input[name=search]:focus {
+    width: 30%;
+}
+#eventos table {
+	width:96%;
+	margin:10px 2% 10px 2%;
+	background:#666;
+	border-spacing:1px;
+}
+#eventos table th, #eventos table td{
+	color:#EEE;
+	padding: 5px 0px 5px 0px;
+	text-align:center;
+	vertical-align:middle;
+}
+#eventos table th, #eventos table th {
+	width: 15%;
+	background:linear-gradient(to bottom, #666, #555);
+	font-size:14pt; font-weight:bold;
+}
+#eventos table td{
+	background:#777;
+	font-size:12pt;
+}
