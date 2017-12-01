@@ -5,11 +5,11 @@
 */
 require_once('role.php');
 require_once('exceptions/invaliduserexception.php');
-require_once('mysqlconnection.php');
+require_once('sqlsrvconnection.php');
 
 class User
 {
-	
+
 	private $name;
 	private $password;
 	private $role;
@@ -31,36 +31,36 @@ class User
 	function __construct()
 	{
 		//empty object
-		if (func_num_args() == 0) 
+		if (func_num_args() == 0)
 		{
 			$this->name = '';
-			$this->password = ''; 
+			$this->password = '';
 			$this->role = new Role();
 			$this->status = '';
 		}
 		//object with data from database
-		if (func_num_args() == 1) 
+		if (func_num_args() == 1)
 		{
 			$arguments = func_get_args();
 			$control = $arguments[0];
 			//get connection
-			$connection = MySqlConnection::getConnection();
+			$connection = SqlSrvConnection::getConnection();
 			//query
 			$query = 'select perfil, nombre, status
-					from admin.usuarios 
+					from admin.usuarios
 					where empleado = ?';
 			//command
 			$params = array($control);
 			$command = sqlsrv_query($connection, $query, $params);
 			$found = sqlsrv_has_rows($command);
-			if ($found) 
+			if ($found)
 			{
 				 while($user = sqlsrv_fetch_array($command))
             	{
 					$this->name = $user['nombre'];
 					$this->status = $user['nombre'];
 					$this->role = new Role($user['perfil']);
-					$this->password = '';
+					$this->password = '<ENCRIPTED>';
             	} /*While*/
 			}
 
@@ -69,7 +69,7 @@ class User
             sqlsrv_close($connection);
 		}
 		//object with data from arguments
-		if (func_num_args() == 3) 
+		if (func_num_args() == 3)
 		{
 			//get arguments
 			$arguments = func_get_args();

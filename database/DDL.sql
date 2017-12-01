@@ -65,7 +65,7 @@ CREATE TABLE [admin].[empleados](
 	CONSTRAINT CHK_Empleados_status CHECK(status IN('UP', 'DW'))
 );
 CREATE TABLE [ventas].[ventas](
-	numero CHAR(12) NOT NULL,
+	numero VARCHAR(20) NOT NULL,
 	evento INT NOT NULL,
 	fechaHora DATETIME NOT NULL DEFAULT GETDATE(),
 	vendedor smallint NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE [ventas].[ventas](
 );
 CREATE TABLE [ventas].[boletos](
 	folio VARCHAR(20) NOT NULL,
-	venta CHAR(12) NOT NULL,
+	venta VARCHAR(20) NOT NULL,
 	butaca INT NOT NULL,
 	CONSTRAINT PK_Boletos PRIMARY KEY(folio),
 	CONSTRAINT FK_Boletos_Ventas FOREIGN KEY (venta) REFERENCES [ventas].[ventas] (numero),

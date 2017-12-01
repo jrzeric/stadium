@@ -1,47 +1,38 @@
 <?php
-	class MySqlConnection
-	{
+	class SqlSrvConnection {
 		//returns a MySQL connection object
-		public static function getConnection()
-		{
+		public static function getConnection() {
 			//open configuration file
-			$configPath = $_SERVER['DOCUMENT_ROOT'].'/stadium/webapp/config/mysqlconnection.json';
+			$configPath = $_SERVER['DOCUMENT_ROOT'].'/stadium/webapp/config/sqlsrvconnection.json';
 			$configData = json_decode(file_get_contents($configPath),true);
 			//check parameters
 			if (isset($configData['server']))
 				$server = $configData['server'];
-			else
-			{
+			else {
 				echo 'Configuration error, server name not found'; die;
 			}
 			if (isset($configData['database']))
 				$database = $configData['database'];
-			else
-			{
+			else {
 				echo 'Configuration error, database name not found'; die;
 			}
-			/*
 			if (isset($configData['user']))
 				$user = $configData['user'];
-			else
-			{
+			else {
 				echo 'Configuration error, username not found'; die;
 			}
 			if (isset($configData['password']))
 				$password = $configData['password'];
-			else
-			{
+			else {
 				echo 'Configuration error, password not found'; die;
-			}*/
+			}
 			//create connection
-			//$connectionInfo = array( "Database"=>$database, "UID"=>$user, "PWD"=>$password);
-			$connectionInfo = array( "Database"=>$database);
-			$connection = sqlsrv_connect( $server, $connectionInfo);
+			$connectionInfo = array("Database"=>$database, "UID"=>$user, "PWD"=>$password);
+			$connection = sqlsrv_connect($server, $connectionInfo);
 			//character set
 			//$connection->set_charset('utf8');
 			//check connection
-			if (!$connection) { echo 'Could not connect to MySql'; die; }
-			//else echo "chingon";
+			if (!$connection) { echo 'Could not connect to SqlSrv'; die; }
 			//return connection
 			return $connection;
 

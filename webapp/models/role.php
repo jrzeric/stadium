@@ -3,10 +3,10 @@
 	*  Role Class
 	*/
 	require_once('exceptions/recordnotfoundexception.php');
-	require_once('mysqlconnection.php');
+	require_once('sqlsrvconnection.php');
 	class Role
 	{
-		
+
 		private $id;
 		private $name;
 
@@ -33,19 +33,19 @@
 				$arguments = func_get_args();
 				$id = $arguments[0];
 				//get connection
-				$connection = MySqlConnection::getConnection();
+				$connection = SqlSrvConnection::getConnection();
 				//query
 				$query = 'select clave, nombre from admin.perfiles_ctg where clave = ?';
 				//command
 				$params = array($id);
 				$command = sqlsrv_query($connection, $query, $params);
 				$found = sqlsrv_has_rows($command);
-				if ($found) 
+				if ($found)
 				{
 					 while($role = sqlsrv_fetch_array($command))
 	            	{
-						$this->id = $role['nombre'];
-						$this->name = $role['clave'];
+						$this->id = $role['clave'];
+						$this->name = $role['nombre'];
 	            	} /*While*/
 				}
 
@@ -61,7 +61,7 @@
 				//pass values to the atributes from the array
 				$this->id = $arguments[0];
 				$this->name = $arguments[1];
-			}//if	
+			}//if
 		}//constructor
 
 		public function toJson()

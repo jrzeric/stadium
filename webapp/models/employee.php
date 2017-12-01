@@ -4,13 +4,13 @@
 * Employee class
 */
 
-require_once('mysqlconnection.php');
+require_once('sqlsrvconnection.php');
 require_once('user.php');
 require_once('exceptions/invaliduserexception.php');
 
 class Employee
 {
-	
+
 	private $control;
 	private $nombre;
 	private $apPaterno;
@@ -39,23 +39,23 @@ class Employee
 	function __construct()
 	{
 		//empty object
-		if (func_num_args() == 0) 
+		if (func_num_args() == 0)
 		{
 			$this->control = '';
 			$this->nombre = '';
 			$this->apPaterno = '';
 			$this->apMaterno = '';
 			$this->fechaContratacion = '';
-			$this->user = new User(); 
+			$this->user = new User();
 		}
 		//object with data from database
-		if (func_num_args() == 1) 
+		if (func_num_args() == 1)
 		{
 			//get arguments
 			$arguments = func_get_args();
 			$control = $arguments[0];
 			//get connection
-			$connection = MySqlConnection::getConnection();
+			$connection = SqlSrvConnection::getConnection();
 			//query
 			$query = 'select control, apPaterno, apMaterno, nombre, fechaContratacion
 					from admin.empleados
@@ -63,7 +63,7 @@ class Employee
 			$params = array($control);
 			$command = sqlsrv_query($connection, $query, $params);
 			$found = sqlsrv_has_rows($command);
-			if ($found) 
+			if ($found)
 			{
 				 while($employee = sqlsrv_fetch_array($command))
             	{
@@ -82,7 +82,7 @@ class Employee
 		}
 
 		//object with data from arguments
-		if (func_num_args() == 6) 
+		if (func_num_args() == 6)
 		{
 			//get arguments
 			$arguments = func_get_args();
@@ -114,7 +114,7 @@ class Employee
 		//get connection
 		$connection = MySqlConnection::getConnection();
 		//query
-		$query = '	declare @respuesta varchar(250)
+		$query = 'declare @respuesta varchar(250)
 					exec usp_iUsuarios ?, ?, ?, ?, ?, ?, @respuesta output
 					select respuesta = @respuesta';
 		$params = array($this->user->getName(), $this->user->getPassword(), $this->apMaterno, $this->apPaterno, $this->nombre, $this->user->getRole()->getId());
@@ -122,7 +122,7 @@ class Employee
 		$respuesta = sqlsrv_fetch_array($command);
 		sqlsrv_free_stmt($command);
         sqlsrv_close($connection);
-        
+
 		if ($respuesta['respuesta'] == 'Registro exitoso') return true;
 
 		else return false;
@@ -133,7 +133,7 @@ class Employee
 		{
 			$list = array();
 			//get connection
-			$connection = MySqlConnection::getConnection();
+			$connection = SqlSrvConnection::getConnection();
 			//query
 			$query = 'select control, apPaterno, apMaterno, nombre, fechaContratacion from admin.empleados';
 			$command = sqlsrv_query($connection, $query);
@@ -153,7 +153,7 @@ class Employee
 			//list
 			$list = array();
 			//encode to json
-			foreach (self::getAll() as $item) 
+			foreach (self::getAll() as $item)
 			{
 				array_push($list, json_decode($item->toJson()));
 			}//foreach
