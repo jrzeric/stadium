@@ -60,6 +60,23 @@ class Boleto {
   }
 
   // methods
+  public static function add($folio, $venta, $butaca) {
+    $connection = SqlSrvConnection::getConnectionVendedor();
+
+    $query = 'insert into [ventas].[boletos] (folio, venta, butaca) values (?, ?, ?);';
+
+    $parameters = array(&$folio, &$venta, &$butaca);
+
+    $stmt = sqlsrv_prepare($connection, $query, $parameters);
+
+    if( !$stmt ) {
+    die( print_r( sqlsrv_errors(), true));
+    }
+    if( sqlsrv_execute( $stmt ) === false ) {
+          die( print_r( sqlsrv_errors(), true));
+    }
+  }
+
   public function toJson() {
     return json_encode(array(
       'folio' => $this->folio,

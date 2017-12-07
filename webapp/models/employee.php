@@ -112,7 +112,7 @@ class Employee
 	public function add()
 	{
 		//get connection
-		$connection = MySqlConnection::getConnection();
+		$connection = SqlSrvConnection::getConnectionAdministrador();
 		//query
 		$query = 'declare @respuesta varchar(250)
 					exec usp_iUsuarios ?, ?, ?, ?, ?, ?, @respuesta output

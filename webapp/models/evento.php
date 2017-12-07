@@ -1,5 +1,8 @@
 <?php
 
+require_once('sqlsrvconnection.php');
+require_once('exceptions/recordnotfoundexception.php');
+
 	class Evento {
 
 		// attribures
@@ -8,6 +11,7 @@
 		private $fecha;
 		private $descripcion;
 		private $imagen;
+		private $status;
 
 		// getters and setters
 		public function getId() { return $this->id; }
@@ -34,6 +38,7 @@
 				$this->fecha = "";
 				$this->descripcion = "";
 				$this->imagen = "";
+				$this->status = "";
 			}
 			// object with data from database
 			if (func_num_args() == 1) {
@@ -56,7 +61,7 @@
 				}
 			}
 			// object with data from arguments
-			if (func_num_args() == 5) {
+			if (func_num_args() == 6) {
 				$arguments = func_get_args();
 
 				$this->id = $arguments[0];
@@ -64,7 +69,16 @@
 				$this->fecha = $arguments[2];
 				$this->descripcion = $arguments[3];
 				$this->imagen = $arguments[4];
+				$this->status = $arguments[5];
 			}
+		}
+
+		function add() {
+			$connection = SqlSrvConnection::getConnectionAdministrador();
+			$query = 'select id, nombre, fecha, descripcion, imagen from [admin].[eventos] where id = ?';
+
+			$parameters = array($id);
+			sqlsrv_query($connection, $query, $parameters);
 		}
 
 		// methods
@@ -74,9 +88,46 @@
 				'nombre' => $this->nombre,
 				'fecha' => $this->fecha,
 				'descripcion' => $this->descripcion,
-				'imagen' => $this->imagen
+				'imagen' => $this->imagen,
+				'status' => $this->status
 			));
 		}
+
+		public static function getAllActive() {
+	    $list = array();
+
+	    $connection = SqlSrvConnection::getConnection();
+	    $query = 'select id, nombre, fecha, descripcion, imagen, status from [admin].[eventos]';
+
+	    $found = sqlsrv_query($connection, $query);
+
+	    if ($found) {
+	      while ($row = sqlsrv_fetch_array($found)) {
+	        array_push($list, new Evento(
+	          $row['id'],
+	          $row['nombre'],
+						$row['fecha'],
+						$row['descripcion'],
+						$row['imagen'],
+						$row['status']
+	        )
+	      );
+	      }
+	    } else throw new RecordNotFoundException();
+
+	    sqlsrv_free_stmt($found);
+	    sqlsrv_close($connection);
+
+	    return $list;
+	  }
+
+	  public static function getAllActiveJson() {
+	    $list = array();
+	    foreach (self::getAllActive() as $item) {
+	      array_push($list, json_decode($item->toJson()));
+	    }//foreach
+	    return json_encode(array('eventos' => $list));
+	  }
 	}
 
 ?>

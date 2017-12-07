@@ -5,14 +5,25 @@ body {
 }
 #svg {
   position: relative;
-  float: center;
+  float: left;
+  width: calc(60% - 18px);
+  height: 625px;
+}
+svg {
+  width: 100%;
+  height: 100%;
+}
+#subtotal {
+  position: relative;
+  width: calc(40% - 10px);
+  float: left;
+}
+#prueba {
+  position: relative;
+  float left;
   width: calc(100% - 18px);
   height: 625px;
   background: #FFF;
   border: 1px solid #EEE;
   box-shadow: 0px 0px 10px #777;
-}
-svg {
-  width: 100%;
-  height: 100%;
 }

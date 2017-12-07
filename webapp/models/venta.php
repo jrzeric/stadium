@@ -37,7 +37,7 @@ class Venta {
     // object with data from database
     if (func_num_args() == 1) {
       $numero = func_get_arg(0);
-      echo $numero;
+
       $connection = SqlSrvConnection::getConnection();
       $query = 'select numero, evento, fechaHora, vendedor from [ventas].[ventas] where numero = ?';
 
@@ -58,10 +58,28 @@ class Venta {
       $arguments = func_get_args();
 
       $this->numero = $arguments[0];
-      $this->evento = new Evento($arguments[1]);
+      $this->evento = $arguments[1];
       $this->fechaHora = $arguments[2];
       $this->vendedor = new Employee($arguments[3]);
     }
+  }
+
+  public static function add($numero, $evento, $fechaHora, $vendedor) {
+    $connection = SqlSrvConnection::getConnectionVendedor();
+
+    $query = 'insert into [ventas].[ventas] (numero, evento, vendedor) values (?, ?, ?);';
+
+    $parameters = array(&$numero, &$evento, &$vendedor);
+
+    $stmt = sqlsrv_prepare($connection, $query, $parameters);
+
+    if( !$stmt ) {
+    die( print_r( sqlsrv_errors(), true));
+    }
+    if( sqlsrv_execute( $stmt ) === false ) {
+          die( print_r( sqlsrv_errors(), true));
+    }
+
   }
 
   // methods

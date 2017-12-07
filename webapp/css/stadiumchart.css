@@ -1,3 +1,7 @@
+#eventos {
+  position: relative;
+  float: left;
+}
 .area1, .area3, .area5, .area7 {
   fill:#D180E5;
   stroke:#530666;
