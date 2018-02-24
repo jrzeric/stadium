@@ -139,3 +139,8 @@ Route::get('prices/{price}', [
     'uses' => 'PriceController@destroy',
     'as'   => 'priceDestroy'
 ]);
+
+
+Route::any('{query}',
+  function() { return redirect('/employees'); })
+  ->where('query', '.*');
