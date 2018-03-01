@@ -1,0 +1,6 @@
+{
+	"server" : "localhost",
+	"database" : "stadium",
+	"user" : "root",
+	"password" : "toor"
+}

@@ -63,6 +63,12 @@ Route::get('prueba', function (App\Http\Price $prices, App\Http\Event $events, A
 });
 
 
+
+Route::resource('sales', 'SaleController', ['only' => [
+    'index', 'show'
+]]);
+
+
 Route::get('employees', [
     'uses' => 'EmployeeController@index',
     'as'   => 'employeeIndex'
@@ -139,8 +145,3 @@ Route::get('prices/{price}', [
     'uses' => 'PriceController@destroy',
     'as'   => 'priceDestroy'
 ]);
-
-
-Route::any('{query}',
-  function() { return redirect('/employees'); })
-  ->where('query', '.*');

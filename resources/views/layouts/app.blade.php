@@ -11,6 +11,8 @@
         <!--user files-->
         <link rel="stylesheet" href="/css/usr.css">
         <script src="/js/usr.js"></script>
+        <!--stadium-->
+
     </head>
     <body>
         <header class="header">

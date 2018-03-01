@@ -1,0 +1,6 @@
+{
+	"server" : "SISTEMAS-12\\SQLEXPRESS",
+	"database" : "seatOrganizer",
+	"user" : "seller",
+	"password" : "abc123"
+}

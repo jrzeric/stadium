@@ -3,9 +3,8 @@
 namespace App\Http;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Area;
 
-class Section extends Model
+class Sale extends Model
 {
-
+    //
 }
