@@ -1,0 +1,112 @@
+#glass
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	background: rgba(150 , 150, 150, .5);
+	z-index: 9900;
+}
+
+#popup
+{
+	position: fixed;
+	background: #FFF;
+	box-shadow: 0px 0px 20px #000;
+	z-index: 9910;
+}
+
+#popuptitle
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 30px;
+	background: #2196F3;
+}
+
+#popuptitle h1
+{
+	font-size: 14pt;
+	color: #FFF;
+	margin: 5px;
+	padding: 0px;
+}
+
+#popupclose
+{
+	position: absolute;
+	/*top: 0px;*/
+	right: 4px;
+	padding: 2px 5px 2px 5px;
+	/*background: #F44336;*/
+	color: #FFF;
+	font-size: 10px;
+	cursor: pointer;
+}
+
+#popupcontent
+{
+	position: absolute;
+	top: 30px;
+	left: 0px;
+	width: 100%;
+}
+
+#popupbuttons
+{
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+	text-align: center;
+}
+
+#popupbuttons button
+{	
+	margin: 10px;
+	font-size: 14pt;
+	padding: 10px 20px 10px 20px;
+	border-radius: 10px;
+	cursor: pointer; 
+}
+
+.popupbuttonneutral
+{
+	border: 1px solid #777;
+	color: #777;
+	background: #FFF;
+}
+
+.popupbuttonneutral:hover
+{
+	border: 1px solid #999;
+	color: #999;
+}
+
+.popupbuttonnegative
+{
+	border: 1px solid #B71C1C;
+	background: #F44336;
+	color: #FFF;
+}
+
+.popupbuttonnegative:hover
+{
+	border: 1px solid #F44336;
+	background: #EF5350;
+}
+
+.popupbuttonpositive
+{
+	border: 1px solid #388E3C;
+	background: #4CAF50;
+	color: #FFF;
+}
+
+.popupbuttonpositive:hover
+{
+	border: 1px solid #4CAF40;
+	background: #66BB6A;
+}
