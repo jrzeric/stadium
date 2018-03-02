@@ -7,6 +7,7 @@ use App\Http\Price;
 use App\Http\Event;
 use App\Http\Section;
 use App\Http\Area;
+use DB;
 
 class PriceApi extends Controller
 {
@@ -102,6 +103,25 @@ class PriceApi extends Controller
         } catch(\Exception $e) {
           $array = array('status' => 1, 'message' => 'Price not found');
           return response()->json($array);
+        }
+    }
+
+    public function eventSection($event, $section)
+    {
+        try {
+            $price = DB::table('prices')
+                        ->select('id', 'event', 'prices.section', 'price')
+                        ->where([
+                            'event' => $event,
+                            'section' => $section
+                          ])
+                        ->get();
+
+            $array = array('status' => 0, 'price' => $price);
+            return response()->json($array);
+        } catch(\Exception $e) {
+            $array = array('status' => 1, 'message' => 'Price not found');
+            return response()->json($array);
         }
     }
 }

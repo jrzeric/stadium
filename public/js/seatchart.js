@@ -16,7 +16,7 @@ function getSeatsId(eventId, sectionId) {
   // Create request
   var x = new XMLHttpRequest();
   // Prepare request
-  x.open('GET', 'http://localhost/stadium/webapp/apis/butaca.php?section=' + sectionId, true);
+  x.open('GET', 'http://stadium.local.net/api/seats/section/' + sectionId, true);
   // Send request
   x.send();
 
@@ -44,7 +44,7 @@ function setSeatId(eventId, data) {
   // sets all the id's to each seat from the section
   for (var i = 0; i < 15; i++) {
     for (var j = 0; j < 20; j++) {
-      seats[seat].id = JSONdata.butacas[seat].id;
+      seats[seat].id = JSONdata.seats[seat].id;
       seat++;
     }
   }
@@ -56,7 +56,7 @@ function setSeatId(eventId, data) {
 
   // gets all seats from the list, ready to sell
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost/stadium/webapp/apis/butacaLista.php?getAll', true);
+  x.open('GET', 'http://stadium.local.net/api/seats/', true);
   x.send();
 
   x.onreadystatechange = function() {
@@ -88,7 +88,7 @@ function setSeatId(eventId, data) {
 
 function getSeatsBougth(eventId, seatId) {
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost/stadium/webapp/apis/boleto.php?evento=' + eventId + '&butaca=' + seatId, true);
+  x.open('GET', 'http://stadium.local.net/api/tickets/sale/' + eventId + '/seat/' + seatId, true);
   x.send();
 
   x.onreadystatechange = function() {
@@ -138,14 +138,14 @@ function setAvailableAgain(seat) {
 
 function getPrice(eventId, sectionId) {
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost/stadium/webapp/apis/precio.php?evento='+ eventId +'&seccion=' + sectionId, true);
+  x.open('GET', 'http://stadium.local.net/api/prices/event/' + eventId + '/section/'+ sectionId, true);
   x.send();
 
   x.onreadystatechange = function() {
     // set price
     if (x.status == 200 && x.readyState == 4) {
       var JSONdata = JSON.parse(x.responseText);
-      var price = JSONdata.precio.precio;
+      var price = JSONdata.price.price;
       precio = price;
     }
   }
@@ -153,7 +153,7 @@ function getPrice(eventId, sectionId) {
 
 function setToList(seatId, price) {
   var x = new XMLHttpRequest();
-  x.open('POST', 'http://localhost/stadium/webapp/apis/butacaLista.php?add=' + seatId + '&price=' + price, true);
+  x.open('POST', 'http://stadium.local.net/api/seats/list/add/id/' + seatId + '/price/' + price, true);
   x.send();
 
   x.onreadystatechange = function() {
@@ -173,7 +173,7 @@ function setToList(seatId, price) {
 function getList() {
   // get seats
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost/stadium/webapp/apis/butacaLista.php?getAll', true);
+  x.open('GET', 'http://stadium.local.net/api/seats/list/get', true);
   x.send();
 
   x.onreadystatechange = function() {

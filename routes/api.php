@@ -40,3 +40,20 @@ Route::resource('tickets', 'TicketApi', ['only' => [
 Route::resource('prices', 'PriceApi', ['only' => [
     'index', 'show'
 ]]);
+
+Route::get('prices/event/{event}/section/{section}', [
+    'uses' => 'PriceApi@eventSection'
+]);
+Route::get('seats/section/{section}', [
+    'uses' => 'SeatApi@section'
+]);
+Route::get('tickets/sale/{sale}/seat/{seat}', [
+    'uses' => 'TicketApi@saleSeat'
+]);
+
+Route::get('seats/list/get/', [
+    'uses' => 'SeatApi@getList2'
+]);
+Route::post('seats/list/add/id/{id}/price/{price}', [
+    'uses' => 'SeatApi@addList2'
+]);

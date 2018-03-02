@@ -13,19 +13,8 @@
         <link rel="stylesheet" href="/css/popup.css">
         <script src="/js/usr.js"></script>
         <!--stadium-->
-        <script src="js/popup/popupclass.js"></script>
-        <script src="js/popup/globals.js"></script>
-        <script src="js/popup/index.js"></script>
-    		<script src="js/popup/popup.js"></script>
-    		<script src="js/others/index.js"></script>
-    		<script src="js/others/seatchart.js"></script>
-    		<script src="js/others/stadiumchart.js"></script>
-
-
-    		<script src="js/popup.js"></script>
-
-
-
+        <link rel="stylesheet" href="/css/seatchart.css">
+        <script src="/js/seatchart.js"></script>
     </head>
     <body>
         <header class="header">
@@ -37,7 +26,7 @@
             </nav>
             <section id="section" class="section">
               <aside class="chartSection">
-                  <svg> @yield('stadiumChart') </svg>
+                  <svg> @yield('seatsChart') </svg>
               </aside>
               <aside class="sale">
                   @yield('main')

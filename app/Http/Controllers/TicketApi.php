@@ -9,6 +9,7 @@ use App\Http\Sale;
 use App\Http\Seat;
 use App\Http\Section;
 use App\Http\Ticket;
+use DB;
 
 class TicketApi extends Controller
 {
@@ -132,6 +133,25 @@ class TicketApi extends Controller
             );
 
             $array = array('status' => 0, 'tickets' => $ticket);
+            return response()->json($array);
+        } catch(\Exception $e) {
+            $array = array('status' => 1, 'message' => 'Ticket not found');
+            return response()->json($array);
+        }
+    }
+
+    public function saleSeat($sale, $seat)
+    {
+        try {
+            $tickets = DB::table('tickets')
+                        ->select('id', 'sale', 'seat')
+                        ->where([
+                            'sale' =>$sale,
+                            'seat' =>$seat,
+                        ])
+                        ->get();
+
+            $array = array('status' => 0, 'tickets' => $tickets);
             return response()->json($array);
         } catch(\Exception $e) {
             $array = array('status' => 1, 'message' => 'Ticket not found');

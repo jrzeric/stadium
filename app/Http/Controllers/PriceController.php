@@ -103,9 +103,9 @@ class PriceController extends Controller
 
         foreach ($prices as $price) {
             $price = Price::where('idyyy');
-            $price->event => $prices[$i]->event,
-            $price->section => $prices[$i]->section,
-            $price->price => $request->input('price')
+            $price->event = $prices[$i]->event;
+            $price->section = $prices[$i]->section;
+            $price->price = $request->input('price');
 
             $price->save();
         }

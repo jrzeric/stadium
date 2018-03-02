@@ -12,15 +12,9 @@ function popupSections(area)
 	this.area = area;
 
 	// get eventId
-	var prueba = document.getElementById('prueba');
-
-	if (prueba.innerHTML != 0) {
-		this.eventId = prueba.innerHTML;
-	} else {
-		var select = document.getElementById('eventos');
-		var eventId = select.options.selectedIndex;
-		this.eventId = eventId;
-	}
+	var eventComboBox = document.getElementById('eventos');
+  var eventId = eventComboBox.options[eventComboBox.selectedIndex].value;
+  this.eventId = eventId;
 
 	if (area == 1 || area == 2 || area == 3 || area == 5 || area == 6 || area == 7) {
 		// Areas con tres secciones
@@ -58,7 +52,9 @@ function arriba()
 
 	// stablish where the form go
 	var form = document.getElementById('topForm');
-	form.method = "POST";
+	form.method = "get";
+  form.action = "sales/create";
+  //$("#topForm").attr("action", "p");
 
 	var setEvent = document.createElement('input');
 	setEvent.type = 'hidden';
@@ -98,7 +94,8 @@ function medio()
 
 	// stablish where the form go
 	var form = document.getElementById('middleForm');
-	form.method = "POST";
+	form.method = "get";
+  form.action = "sales/create";
 
 	var setEvent = document.createElement('input');
 	setEvent.type = 'hidden';
@@ -137,7 +134,8 @@ function abajo()
 
 	// stablish where the form go
 	var form = document.getElementById('bottomForm');
-	form.method = "POST";
+	form.method = "get";
+  form.action = "sales/create";
 
 	var setEvent = document.createElement('input');
 	setEvent.type = 'hidden';

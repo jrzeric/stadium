@@ -23,9 +23,14 @@ class SaleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($event, $section)
+    public function create(Request $request)
     {
-        
+        $data = [
+            'event' => $request->input('event'),
+            'area' => $request->input('area'),
+            'section' => $request->input('section')
+        ];
+        return view('sales/create', $data);
     }
 
     /**

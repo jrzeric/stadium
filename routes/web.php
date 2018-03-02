@@ -65,6 +65,9 @@ Route::get('prueba', function (App\Http\Price $prices, App\Http\Event $events, A
 
 
 Route::resource('sales', 'SaleController', ['only' => [
+    'index', 'show', 'create'
+]]);
+Route::resource('tickets', 'TicketController', ['only' => [
     'index', 'show'
 ]]);
 
