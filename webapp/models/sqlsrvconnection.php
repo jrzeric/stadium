@@ -44,8 +44,8 @@
 			$configData = json_decode(file_get_contents($configPath),true);
 			//check parameters
 			if (isset($configData['server']))
+        $server = $configData['server'];
 			else {
-				$server = $configData['server'];
 				echo 'Configuration error, server name not found'; die;
 			}
 			if (isset($configData['database']))

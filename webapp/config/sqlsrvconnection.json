@@ -1,6 +1,6 @@
 {
-	"server" : "SISTEMAS-12\\SQLEXPRESS",
-	"database" : "seatOrganizer",
+	"server" : "LAPTOP-MHEI2C30",
+	"database" : "stadium",
 	"user" : "sa",
-	"password" : "toor"
+	"password" : "as"
 }
