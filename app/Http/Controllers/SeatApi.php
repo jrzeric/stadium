@@ -73,7 +73,7 @@ class SeatApi extends Controller
                 'id' => $seat->id,
                 'row' => $seat->row,
                 'column' => $seat->column,
-                'section' => $arraySection
+                'section' => 0
             ];
 
             $array = array('status' => 0, 'seat' => $arraySeat);
@@ -196,5 +196,50 @@ class SeatApi extends Controller
             ));
         }
         session_write_close();
+    }
+
+    public function getSeatArea($section, $area)
+    {
+        $seats = DB::table('seats')
+                    ->join('sections', 'seats.section', '=', 'sections.id')
+                    ->join('areas', 'sections.area', '=', 'areas.id')
+                    ->select('seats.id as seatsId', 'seats.row as seatsRow', 'seats.column as seatsColumn', 'seats.section as seatsSection', 'seats.status as seatsStatus',
+                        'sections.id as sectionsId', 'sections.area as sectionsArea', 'sections.name as sectionsName', 'sections.color as sectionsColor',
+                        'areas.id as areasId', 'areas.name as areasName'
+                    )
+                    ->where([
+                      ['seats.section', $section],
+                      ['sections.area', $area]
+                    ])->get();
+                    //->groupBy('events.name', 'sections.name', 'prices.price')
+        $list = array();
+
+        foreach ($seats as $seat) {
+            $area = array(
+                'id' => $seat->areasId,
+                'name' => $seat->areasName
+            );
+
+            $section = array(
+                'id' => $seat->sectionsId,
+                'area' => $area,
+                'name' => $seat->sectionsName,
+                'color' => $seat->sectionsColor
+            );
+
+            $seat = array(
+                'id' => $seat->seatsId,
+                'row' => $seat->seatsRow,
+                'column' => $seat->seatsColumn,
+                'section' => $section,
+                'status' => $seat->seatsStatus,
+            );
+
+            array_push($list, $seat);
+        }
+
+        $array = array('status' => 0, 'seats' => $list);
+        return response()->json($array);
+
     }
 }

@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="/css/seatchart.css">
         <script src="/js/seatchart.js"></script>
     </head>
-    <body>
+    <body onload="init({{ $event }}, {{ $section }})">
         <header class="header">
             @yield('header')
         </header>

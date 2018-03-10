@@ -57,3 +57,6 @@ Route::get('seats/list/get/', [
 Route::post('seats/list/add/id/{id}/price/{price}', [
     'uses' => 'SeatApi@addList2'
 ]);
+Route::get('seats/section/{section}/area/{area}', [
+    'uses' => 'SeatApi@getSeatArea'
+]);
