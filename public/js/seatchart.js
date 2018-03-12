@@ -18,7 +18,7 @@ function getSeatsId(eventId, sectionId) {
   // Create request
   var x = new XMLHttpRequest();
   // Prepare request
-  x.open('GET', 'http://localhost:8080/api/seats/section/' + sessionStorage.section + '/area/' + sessionStorage.area, true);
+  x.open('GET', 'http://stadium.local.net/api/seats/section/' + sessionStorage.section + '/area/' + sessionStorage.area, true);
   // Send request
   x.send();
 
@@ -47,20 +47,15 @@ function setSeatId(eventId, data) {
 
   console.log(seatsJSON.length);
 
+  var elements = document.getElementsByClassName("available");
+
   // sets all the id's to each seat from the section
   for (var i = 0; i < seatsJSON.length; i++) 
   {
-    var id = "XMLID_" + (i + 1) + "_";
-    console.log("Id del asiento" + id);
-    console.log("Id de la BD" + seatsJSON[i].id);
-    try
-    {
-      document.getElementById(id).setAttribute("id", seatsJSON[i].id);
-    }
-    catch(e)
-    {
-      console.log('' + e);
-    }
+    //var id = "XMLID_" + (i + 1) + "_";
+    //console.log("Id del asiento" + id);
+    //console.log("Id de la BD" + seatsJSON[i].id);
+    elements[i].setAttribute("id", seatsJSON[i].id);
   }
 
   // gets all seats bougth from the section
@@ -70,7 +65,7 @@ function setSeatId(eventId, data) {
 
   // gets all seats from the list, ready to sell
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost:8080/api/seats/', true);
+  x.open('GET', 'http://stadium.local.net/api/seats/', true);
   x.send();
 
   x.onreadystatechange = function() {
@@ -102,7 +97,7 @@ function setSeatId(eventId, data) {
 
 function getSeatsBougth(eventId, seatId) {
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost:8080/api/tickets/sale/' + eventId + '/seat/' + seatId, true);
+  x.open('GET', 'http://stadium.local.net/api/tickets/sale/' + eventId + '/seat/' + seatId, true);
   x.send();
 
   x.onreadystatechange = function() {
@@ -152,7 +147,7 @@ function setAvailableAgain(seat) {
 
 function getPrice(eventId, sectionId) {
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost:8080/api/prices/event/' + eventId + '/section/'+ sectionId, true);
+  x.open('GET', 'http://stadium.local.net/api/prices/event/' + eventId + '/section/'+ sectionId, true);
   x.send();
 
   x.onreadystatechange = function() {
@@ -167,7 +162,7 @@ function getPrice(eventId, sectionId) {
 
 function setToList(seatId, price) {
   var x = new XMLHttpRequest();
-  x.open('POST', 'http://localhost:8080/api/seats/list/add/id/' + seatId + '/price/' + price, true);
+  x.open('POST', 'http://stadium.local.net/api/seats/list/add/id/' + seatId + '/price/' + price, true);
   x.send();
 
   x.onreadystatechange = function() {
@@ -187,7 +182,7 @@ function setToList(seatId, price) {
 function getList() {
   // get seats
   var x = new XMLHttpRequest();
-  x.open('GET', 'http://localhost:8080/api/seats/list/get', true);
+  x.open('GET', 'http://stadium.local.net/api/seats/list/get', true);
   x.send();
 
   x.onreadystatechange = function() {
