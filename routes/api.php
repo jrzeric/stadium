@@ -44,11 +44,16 @@ Route::resource('prices', 'PriceApi', ['only' => [
 Route::get('prices/event/{event}/section/{section}', [
     'uses' => 'PriceApi@eventSection'
 ]);
+
 Route::get('seats/section/{section}', [
     'uses' => 'SeatApi@section'
 ]);
+
 Route::get('tickets/sale/{sale}/seat/{seat}', [
     'uses' => 'TicketApi@saleSeat'
+]);
+Route::get('tickets/event/{event}/seat/{seat}', [
+    'uses' => 'TicketApi@getTicketsByEventSectionArea'
 ]);
 
 Route::get('seats/list/get/', [
