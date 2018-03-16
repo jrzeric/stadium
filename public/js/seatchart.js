@@ -2,6 +2,8 @@
 var precio = 0.00;
 
 function init(eventId, sectionId) {
+  console.log(sessionStorage.section);
+  console.log(sessionStorage.area);
   console.log("Inicializado");
   // evento, seccion
   // Sets the ID to each seat from that section
@@ -16,7 +18,7 @@ function getSeatsId(eventId, sectionId) {
   // Create request
   var x = new XMLHttpRequest();
   // Prepare request
-  x.open('GET', 'http://stadium.local.net/api/seats/section/' + sectionId, true);
+  x.open('GET', 'http://stadium.local.net/api/seats/section/' + sessionStorage.section + '/area/' + sessionStorage.area, true);
   // Send request
   x.send();
 
@@ -40,13 +42,20 @@ function setSeatId(eventId, data) {
   var JSONdata = JSON.parse(data);
   var seats = document.getElementsByClassName("available");
   var seat = 0;
+  var seatsJSON = JSONdata.seats;
+  console.log(seatsJSON[1].id);
+
+  console.log(seatsJSON.length);
+
+  var elements = document.getElementsByClassName("available");
 
   // sets all the id's to each seat from the section
-  for (var i = 0; i < 15; i++) {
-    for (var j = 0; j < 20; j++) {
-      seats[seat].id = JSONdata.seats[seat].id;
-      seat++;
-    }
+  for (var i = 0; i < seatsJSON.length; i++) 
+  {
+    //var id = "XMLID_" + (i + 1) + "_";
+    //console.log("Id del asiento" + id);
+    //console.log("Id de la BD" + seatsJSON[i].id);
+    elements[i].setAttribute("id", seatsJSON[i].id);
   }
 
   // gets all seats bougth from the section

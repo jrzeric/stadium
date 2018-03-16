@@ -3,6 +3,21 @@ var area = 0;
 var eventId = 0;
 function popupSections(area)
 {
+
+	switch(area) {
+    case 1: sessionStorage.area = "ULC"; break;
+    case 2: sessionStorage.area = "UPM"; break;
+    case 3: sessionStorage.area = "URC"; break;
+    case 4: sessionStorage.area = "RTS"; break;
+    case 5: sessionStorage.area = "DRC"; break;
+    case 6: sessionStorage.area = "DWM"; break;
+    case 7: sessionStorage.area = "DLC"; break;
+    case 8: sessionStorage.area = "LTS"; break;
+    case 9: sessionStorage.area = "LTP"; break;
+    case 10: sessionStorage.area = "RTP"; break;
+  }
+
+
 	var titulo = 'Seccion del area ' + area;
 	var ancho = 215;
 	var altura = 225;
@@ -49,6 +64,8 @@ function arriba()
 		case 10: sectionId = 24; break;
 	}
 
+	sessionStorage.section = sectionId;
+
 
 	// stablish where the form go
 	var form = document.getElementById('topForm');
@@ -92,6 +109,8 @@ function medio()
 		case 8: sectionId = 21; break;
 	}
 
+	sessionStorage.section = sectionId;
+
 	// stablish where the form go
 	var form = document.getElementById('middleForm');
 	form.method = "get";
@@ -131,6 +150,8 @@ function abajo()
 		case 7: sectionId = 20; break;
 		case 8: sectionId = 22; break;
 	}
+
+	sessionStorage.section = sectionId;
 
 	// stablish where the form go
 	var form = document.getElementById('bottomForm');
