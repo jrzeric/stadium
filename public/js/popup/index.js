@@ -64,6 +64,8 @@ function arriba()
 		case 10: sectionId = 24; break;
 	}
 
+
+	sessionStorage.event = document.getElementById("eventos").value;
 	sessionStorage.section = sectionId;
 
 
@@ -93,6 +95,7 @@ function arriba()
 	form.appendChild(setArea);
 	form.appendChild(setSection);
 
+
 }
 
 function medio()
@@ -109,6 +112,7 @@ function medio()
 		case 8: sectionId = 21; break;
 	}
 
+	sessionStorage.event = document.getElementById("eventos").value;
 	sessionStorage.section = sectionId;
 
 	// stablish where the form go
@@ -135,11 +139,13 @@ function medio()
 	form.appendChild(setEvent);
 	form.appendChild(setArea);
 	form.appendChild(setSection);
+
 }
 
 function abajo()
 {
 	var sectionId = 0;
+
 	switch(this.area) {
 		case 1: sectionId = 3; break;
 		case 2: sectionId = 6; break;
@@ -152,6 +158,7 @@ function abajo()
 	}
 
 	sessionStorage.section = sectionId;
+	sessionStorage.event = document.getElementById("eventos").value;
 
 	// stablish where the form go
 	var form = document.getElementById('bottomForm');

@@ -59,55 +59,34 @@ function setSeatId(eventId, data) {
   }
 
   // gets all seats bougth from the section
-    for (var i = 0; i < seats.length; i++) {
-    getSeatsBougth(eventId, seats[i].id);
-  }
+    for (var i = 0; i < seats.length; i++) 
+    {
+      // Create request
+      var x = new XMLHttpRequest();
+      // Prepare request
+      x.open('GET', 'http://stadium.local.net/api/tickets/event/' + sessionStorage.event + '/seat/' + i, true);
+      // Send request
+      x.send();
 
-  // gets all seats from the list, ready to sell
-  var x = new XMLHttpRequest();
-  x.open('GET', 'http://stadium.local.net/api/seats/', true);
-  x.send();
+      // Handle readyState change event
+      x.onreadystatechange = function() {
+        // check status
+        //status : 200=OK, 404=Page not found, 500=server denied access
+        // readyState : 4=Back with data
+        if (x.status == 200 && x.readyState == 4) {
+            var JSONdata1 = JSON.parse(x.responseText);
 
-  x.onreadystatechange = function() {
-    if (x.status == 200 && x.readyState == 4) {
-      try {
-        JSONdata = JSON.parse(x.responseText);
-        var selected = JSONdata.Seleccionados;
-
-        for (var i = 0; i < seats.length; i++) {
-          for (var j = 0; j < selected.length; j++) {
-            if (seats[i].id == selected[j].id) {
-
-              seats[i].setAttribute("class", "selected");
-              //console.log(seats[i].className());
-
-              seats[i].onclick = function() { setAvailableAgain(this) };
-              //setToList(selected[i].id, precio);
-            }
+          if (JSONdata1.status == 0) 
+          {
+            document.getElementById(i).className = "selled";
           }
         }
-      } catch(e) { }
+      }
     }
-  }
-
-
-
-  // toBuy()
 }
 
-function getSeatsBougth(eventId, seatId) {
-  var x = new XMLHttpRequest();
-  x.open('GET', 'http://stadium.local.net/api/tickets/sale/' + eventId + '/seat/' + seatId, true);
-  x.send();
-
-  x.onreadystatechange = function() {
-    if (x.status == 200 && x.readyState == 4) {
-      try {
-        // sets different color to each seat bougth
-        viewSeatsBougth(x.responseText);
-      } catch(e) { }
-    }
-  }
+function getSeatsBougth() 
+{
 }
 
 // sets different color to each seat bougth
