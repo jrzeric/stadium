@@ -159,9 +159,9 @@ class TicketApi extends Controller
         }
     }
 
-    public function getTicketsByEventSectionArea($event, $seat)
+    public function getTicketsByEventSectionArea($event, $section, $area)
     {
-        $ticket = DB::table('tickets')
+        $tickets = DB::table('tickets')
                     ->join('seats', 'tickets.seat', '=', 'seats.id')
                     ->join('sections', 'seats.section', '=', 'sections.id')
                     ->join('areas', 'sections.area', '=', 'areas.id')
@@ -176,54 +176,61 @@ class TicketApi extends Controller
                     )
                     ->where([
                       ['sales.event', $event],
-                      ['tickets.seat', $seat]
+                      ['seats.section', $section],
+                      ['sections.area', $area]
                     ])->get();
 
         $array = array('status' => 1, 'message' => 'No ticket found!');
 
-        if (count($ticket) > 0) {
-            $area = array(
-                'id' => $ticket[0]->areasId,
-                'name' => $ticket[0]->areasName
-            );
+        if (count($tickets) > 0) {
+            $list = array();
 
-            $section = array(
-                'id' => $ticket[0]->sectionsId,
-                'area' => $area,
-                'name' => $ticket[0]->sectionsName,
-                'color' => $ticket[0]->sectionsColor
-            );
+            foreach ($tickets as $ticket) {
+                $area = array(
+                    'id' => $ticket->areasId,
+                    'name' => $ticket->areasName
+                );
 
-            $seat = array(
-                'id' => $ticket[0]->seatsId,
-                'row' => $ticket[0]->seatsRow,
-                'column' => $ticket[0]->seatsColumn,
-                'section' => $section,
-                'status' => $ticket[0]->seatsStatus
-            );
+                $section = array(
+                    'id' => $ticket->sectionsId,
+                    'area' => $area,
+                    'name' => $ticket->sectionsName,
+                    'color' => $ticket->sectionsColor
+                );
 
-            $event = array(
-                'id' => $ticket[0]->eventsId,
-                'name' => $ticket[0]->eventsName,
-                'date' => $ticket[0]->eventsDate,
-                'description' => $ticket[0]->eventsDescription,
-                'image' => $ticket[0]->eventsImage
-            );
+                $seat = array(
+                    'id' => $ticket->seatsId,
+                    'row' => $ticket->seatsRow,
+                    'column' => $ticket->seatsColumn,
+                    'section' => $section,
+                    'status' => $ticket->seatsStatus
+                );
 
-            $sale = array(
-                'id' => $ticket[0]->salesId,
-                'event' => $event,
-                'dateTime' => $ticket[0]->salesDateTime,
-                'seller' => $ticket[0]->salesSeller
-            );
+                $event = array(
+                    'id' => $ticket->eventsId,
+                    'name' => $ticket->eventsName,
+                    'date' => $ticket->eventsDate,
+                    'description' => $ticket->eventsDescription,
+                    'image' => $ticket->eventsImage
+                );
 
-            $ticket = array(
-                'id' => $ticket[0]->ticketsId,
-                'sale' => $sale,
-                'seat' => $seat
-            );
+                $sale = array(
+                    'id' => $ticket->salesId,
+                    'event' => $event,
+                    'dateTime' => $ticket->salesDateTime,
+                    'seller' => $ticket->salesSeller
+                );
 
-            $array = array('status' => 0, 'ticket' => $ticket);
+                $ticket = array(
+                    'id' => $ticket->ticketsId,
+                    'sale' => $sale,
+                    'seat' => $seat
+                );
+
+                array_push($list, $ticket);
+            }
+
+            $array = array('status' => 0, 'tickets' => $list);
         }
 
         return response()->json($array);

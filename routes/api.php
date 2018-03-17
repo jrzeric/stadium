@@ -52,7 +52,7 @@ Route::get('seats/section/{section}', [
 Route::get('tickets/sale/{sale}/seat/{seat}', [
     'uses' => 'TicketApi@saleSeat'
 ]);
-Route::get('tickets/event/{event}/seat/{seat}', [
+Route::get('tickets/event/{event}/section/{section}/area/{area}', [
     'uses' => 'TicketApi@getTicketsByEventSectionArea'
 ]);
 
