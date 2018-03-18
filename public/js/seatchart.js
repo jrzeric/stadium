@@ -18,7 +18,7 @@ function getSeatsId(eventId, sectionId) {
   // Create request
   var x = new XMLHttpRequest();
   // Prepare request
-  x.open('GET', 'http://stadium.local.net/api/seats/section/' + sessionStorage.section + '/area/' + sessionStorage.area, true);
+  x.open('GET', 'http://localhost:8080/api/seats/section/' + sessionStorage.section + '/area/' + sessionStorage.area, true);
   // Send request
   x.send();
 
@@ -58,29 +58,34 @@ function setSeatId(eventId, data) {
     elements[i].setAttribute("id", seatsJSON[i].id);
   }
 
+  console.log("Evento: " + sessionStorage.event);
+
   // gets all seats bougth from the section
-    for (var i = 0; i < seats.length; i++) 
-    {
-      // Create request
-      var x = new XMLHttpRequest();
-      // Prepare request
-      x.open('GET', 'http://stadium.local.net/api/tickets/event/' + sessionStorage.event + '/seat/' + i, true);
-      // Send request
-      x.send();
 
-      // Handle readyState change event
-      x.onreadystatechange = function() {
-        // check status
-        //status : 200=OK, 404=Page not found, 500=server denied access
-        // readyState : 4=Back with data
-        if (x.status == 200 && x.readyState == 4) {
-            var JSONdata1 = JSON.parse(x.responseText);
+    // Create request
+    var x = new XMLHttpRequest();
+    // Prepare request
+    x.open('GET', 'http://localhost:8080/api/tickets/event/' + sessionStorage.event + '/section/' + sessionStorage.section + '/area/' + sessionStorage.area, true);
+    // Send request
+    x.send();
 
-          if (JSONdata1.status == 0) 
+    // Handle readyState change event
+    x.onreadystatechange = function() {
+      // check status
+      //status : 200=OK, 404=Page not found, 500=server denied access
+      // readyState : 4=Back with data
+      if (x.status == 200 && x.readyState == 4) 
+      {
+        var JSONdata1 = JSON.parse(x.responseText);
+        if (JSONdata1.status == 0) 
+        {
+          var selledSeats = JSONdata1.tickets;
+          for (var i = 0; i < selledSeats.length; i++) 
           {
-            document.getElementById(i).className = "selled";
-          }
-        }
+            console.log(selledSeats[i].seat.id);
+            document.getElementById(selledSeats[i].seat.id).setAttribute("class", "selled"); 
+          }//for
+        }//if
       }
     }
 }
@@ -123,6 +128,7 @@ function setAvailableAgain(seat) {
   // delete seat from the list, to make it available again
   deleteFromList(seat.id);
 }
+
 
 function getPrice(eventId, sectionId) {
   var x = new XMLHttpRequest();

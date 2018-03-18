@@ -1,10 +1,10 @@
 .available {
-	fill:darkblue;
+	fill:lightgray;
 	stroke:#000000;
 	stroke-miterlimit:10;
 }
 .selled {
-	fill: lightgray;
+	fill: darkblue;
 	stroke:#000000;
 	stroke-miterlimit:10;
 }
