@@ -13,21 +13,14 @@
         <link rel="stylesheet" href="/css/popup.css">
         <script src="/js/usr.js"></script>
         <!--stadium-->
-        <script src="js/popup/popupclass.js"></script>
-        <script src="js/popup/globals.js"></script>
-        <script src="js/popup/index.js"></script>
-    		<script src="js/popup/popup.js"></script>
-    		<script src="js/others/index.js"></script>
-    		<script src="js/others/seatchart.js"></script>
-    		<script src="js/others/stadiumchart.js"></script>
-
-
-    		<script src="js/popup.js"></script>
-
-
-
+        <script src="/js/popup/popupclass.js"></script>
+        <script src="/js/popup/globals.js"></script>
+        <script src="/js/popup/index.js"></script>
+    		<script src="/js/popup/popup.js"></script>
+    		<script src="/js/seatchart.js"></script>
+    		<script src="/js/stadiumchart.js"></script>
     </head>
-    <body>
+    <body onload="salesSelect()">
         <header class="header">
             @yield('header')
         </header>
@@ -39,8 +32,22 @@
               <aside class="chartSection">
                   <svg> @yield('stadiumChart') </svg>
               </aside>
-              <aside class="sale">
+              <aside id="sale" class="sale" style="display: block;">
                   @yield('main')
+              </aside>
+              <aside id="saleTicket" class="sale" style="display: none;">
+                  <div id="salesTitle">
+                      <label id="countTickets"></label>
+                      <label id="title"></label>
+                  </div>
+                  <form action="{{ route('sales.store') }}" method="post">
+                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                      <label id="js" name="js" hidden></label>
+                      <div class="salesButton text-center"><a href="{{ route('sales.index') }}" class="btn btn-success">Sell</a></div>
+                      <div class="salesButton text-center"><a href="{{ route('sales.index') }}" class="btn btn-danger">Cancel</a></div>
+                  </form>
+                  <div id="tickets" class="tickets"></div>
+                  <div id="total"></div>
               </aside>
             </section>
 

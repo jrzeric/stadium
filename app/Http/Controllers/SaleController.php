@@ -14,8 +14,14 @@ class SaleController extends Controller
      */
     public function index()
     {
-      $events = Event::all();
-      return view('sales/index', ['events' => $events]);
+        $value = session('login');
+        if($value) {
+            $events = Event::all();
+            return view('sales/index', ['events' => $events]);
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
+
     }
 
     /**
@@ -25,12 +31,17 @@ class SaleController extends Controller
      */
     public function create(Request $request)
     {
-        $data = [
-            'event' => $request->input('event'),
-            'area' => $request->input('area'),
-            'section' => $request->input('section')
-        ];
-        return view('sales/create', $data);
+        $value = session('login');
+        if($value) {
+            $data = [
+                'event' => $request->input('event'),
+                'area' => $request->input('area'),
+                'section' => $request->input('section')
+            ];
+            return view('sales/create', $data);
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
     }
 
     /**
@@ -41,7 +52,21 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tickets = $request->input('js');
+
+        foreach ($tickets as $ticket) {
+            $eventId = $ticket->title;
+
+            $sale = new Sale ([
+                'event' => $firstName,
+                'dateTime' => date('Y-m-d'),
+                'seller' => session('login')
+            ]);
+
+            $sale->save();
+        }
+
+        return $array;
     }
 
     /**
@@ -50,9 +75,9 @@ class SaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+
     }
 
     /**

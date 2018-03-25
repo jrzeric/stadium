@@ -13,22 +13,32 @@ class PriceController extends Controller
 {
     public function index()
     {
-        $prices = DB::table('prices')
-                    ->join('events', 'prices.event', '=', 'events.id')
-                    ->join('sections', 'prices.section', '=', 'sections.id')
-                    ->select('events.name as event', 'sections.name as section', 'prices.price as price')
-                    ->groupBy('events.name', 'sections.name', 'prices.price')
-                    ->get();
+        $value = session('login');
+        if($value) {
+            $prices = DB::table('prices')
+                        ->join('events', 'prices.event', '=', 'events.id')
+                        ->join('sections', 'prices.section', '=', 'sections.id')
+                        ->select('events.name as event', 'sections.name as section', 'prices.price as price')
+                        ->groupBy('events.name', 'sections.name', 'prices.price')
+                        ->get();
 
-        return view('prices/index', ['prices' => $prices]);
+            return view('prices/index', ['prices' => $prices]);
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
     }
 
     public function create()
     {
-        $events = Event::all();
-        $sections = Section::all();
+        $value = session('login');
+        if($value) {
+            $events = Event::all();
+            $sections = Section::all();
 
-        return view('prices/create')->with('events', $events)->with('sections', $sections);
+            return view('prices/create')->with('events', $events)->with('sections', $sections);
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
     }
 
     public function store(Request $request)
@@ -77,15 +87,20 @@ class PriceController extends Controller
 
     public function edit($section)
     {
-        $price = DB::table('prices')
-                      ->join('events', 'prices.event', '=', 'events.id')
-                      ->join('sections', 'prices.section', '=', 'sections.id')
-                      ->select('prices.event as eventId', 'events.name as event', 'sections.name as section', 'prices.price as price')
-                      ->where('sections.name', $section)
-                      ->groupBy('prices.event', 'events.name', 'sections.name', 'prices.price')
-                      ->first();
+        $value = session('login');
+        if($value) {
+            $price = DB::table('prices')
+                          ->join('events', 'prices.event', '=', 'events.id')
+                          ->join('sections', 'prices.section', '=', 'sections.id')
+                          ->select('prices.event as eventId', 'events.name as event', 'sections.name as section', 'prices.price as price')
+                          ->where('sections.name', $section)
+                          ->groupBy('prices.event', 'events.name', 'sections.name', 'prices.price')
+                          ->first();
 
-        return view('prices/show', ['price' => $price]);
+            return view('prices/show', ['price' => $price]);
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
     }
 
     public function update(Request $request, $section)

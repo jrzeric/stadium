@@ -53,16 +53,47 @@
 
 .chartSection {
     position: relative;
-    width: 75%;
+    width: 70%;
     height: auto;
     float: left;
 }
 .sale {
     position: relative;
-    width: 25%;
+    width: 30%;
     height: auto;
     float: left;
 }
+.tickets {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin: 0px auto;
+  color: #fff;
+  float: left;
+}
+.ticket {
+  position: relative;
+  width: 95%;
+  height: auto;
+  padding: 4%;
+  margin: 5px;
+  text-align: center;
+  background-color: #212121;
+  border-radius: 10px;
+  float: left;
+}
+.ticket__title { font-size: 14pt; font-weight: bold; }
+.ticket__columns--four { position: relative; width: 25%; float: left; }
+.ticket__columns--two { position: relative; width: 50%; float: left; }
+.ticket__subtitle { font-size: 14pt; }
+.ticket__info { font-size: 12pt; }
+.ticket__subtitle--sma { font-size: 12pt; margin-top: 4px; }
+.ticket__info--sma { font-size: 10pt; margin-bottom: 4px; }
+.ticket__color--gray { color: #E0E0E0; }
+.ticket__color--black { color: #000; }
+
+.salesTitleSection { position: relative; width: 100%; float: left; }
+.salesTitle, .salesButton {  position: relative; width: 40%; float: left; }
 
 
 

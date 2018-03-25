@@ -9,10 +9,12 @@
 
 @section('main')
 
-<h3>Event</h3>
-<select class="form-control" id="eventos" name="eventos">
-    @foreach ($events as $event)
-        <option value="{{ $event->id }}">{{ $event->name }}</option>
-    @endforeach
-</select>
+<div id="salesSelect">
+  <h3>Event</h3>
+  <select class="form-control" id="eventos" name="eventos">
+      @foreach ($events as $event)
+          <option value="{{ $event->id }}">{{ $event->name }}</option>
+      @endforeach
+  </select>
+</div>
 @endsection

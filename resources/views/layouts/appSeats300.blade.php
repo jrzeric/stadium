@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
         <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
         <!--jquery-->
-        <script src="/assets/jquery/jquery-3.3.1.min.js"></script>
+        <!--<script src="/assets/jquery/jquery-3.3.1.min.js"></script>-->
         <!--user files-->
         <link rel="stylesheet" href="/css/usr.css">
         <link rel="stylesheet" href="/css/popup.css">

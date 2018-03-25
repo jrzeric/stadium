@@ -4,18 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Event;
+use DB;
 
 class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::all();
-        return view('events/index', ['events' => $events]);
+        $value = session('login');
+        if($value) {
+            $user = DB::table('users')
+                        ->join('employees', 'users.employee', '=', 'employees.id')
+                        ->join('profiles', 'users.profile', '=', 'profiles.id')
+                        ->select('users.employee as usersEmployee', 'users.profile as usersProfile', 'users.email as usersEmail', 'users.password as usersPassword', 'users.status as usersStatus',
+                            'employees.id as employeesId', 'employees.firstName as employeesFirstName', 'employees.lastname as employeesLastName', 'employees.hired as employeesHired', 'employees.status as employeesStatus',
+                            'profiles.id as profilesId', 'profiles.name as profilesName'
+                        )
+                        ->where([
+                          ['users.employee', $value],
+                          ['employees.status', 'UP']
+                        ])->get();
+            if ($user[0]->profilesId != 1) {
+                return redirect()->route('sales.index');
+            }
+
+            $events = Event::all();
+            return view('events/index', ['events' => $events]);
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
+
     }
 
     public function create()
     {
-        return view('events/create');
+        $value = session('login');
+        if($value) {
+            return view('events/create');
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
     }
 
     public function store(Request $request)
@@ -38,8 +65,13 @@ class EventController extends Controller
 
     public function edit($id)
     {
-        $event = Event::find($id);
-        return view('events/show', ['event' => $event]);
+        $value = session('login');
+        if($value) {
+            $event = Event::find($id);
+            return view('events/show', ['event' => $event]);
+        } else {
+            return redirect()->route('admin.auth.login');
+        }
     }
 
     public function update(Request $request, $id)

@@ -52,31 +52,37 @@ class SeatApi extends Controller
 
     public function show($id)
     {
+        $seat = DB::table('seats')
+                    ->join('sections', 'seats.section', '=', 'sections.id')
+                    ->join('areas', 'sections.area', '=', 'areas.id')
+                    ->select('seats.id as seatsId', 'seats.row as seatsRow', 'seats.column as seatsColumn', 'seats.section as seatsSection', 'seats.status as seatsStatus',
+                        'sections.id as sectionsId', 'sections.area as sectionsArea', 'sections.name as sectionsName', 'sections.color as sectionsColor',
+                        'areas.id as areasId', 'areas.name as areasName'
+                    )
+                    ->where('seats.id', $id)
+                    ->get();
+
         try {
-            $seat = Seat::find($id);
-            $section = Section::find($seat->section);
-            $area = Area::find($section->area);
-
-            $arrayArea = [
-                'id' => $area->id,
-                'name' => $area->name
+            $area = [
+                'id' => $seat[0]->areasId,
+                'name' => $seat[0]->areasName
             ];
 
-            $arraySection = [
-                'id' => $section->id,
-                'area' => $arrayArea,
-                'name' => $section->name,
-                'color' => $section->color
+            $section = [
+                'id' => $seat[0]->sectionsId,
+                'area' => $area,
+                'name' => $seat[0]->sectionsName,
+                'color' => $seat[0]->sectionsColor
             ];
 
-            $arraySeat = [
-                'id' => $seat->id,
-                'row' => $seat->row,
-                'column' => $seat->column,
-                'section' => 0
+            $seat = [
+                'id' => $seat[0]->seatsId,
+                'row' => $seat[0]->seatsRow,
+                'column' => $seat[0]->seatsColumn,
+                'section' => $section
             ];
 
-            $array = array('status' => 0, 'seat' => $arraySeat);
+            $array = array('status' => 0, 'seat' => $seat);
             return response()->json($array);
         } catch(\Exception $e) {
               $array = array(

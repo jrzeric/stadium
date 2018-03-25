@@ -11,9 +11,10 @@
 |
 */
 
-/*Route::get('/', function () {
-    return view('index');
-});*/
+Route::get('/', function () {
+    return redirect()->route('admin.auth.login');
+
+});
 
 /*Route::get('prueba', function (App\Http\Section $sections) {
 
@@ -65,8 +66,9 @@ Route::get('prueba', function (App\Http\Price $prices, App\Http\Event $events, A
 
 
 Route::resource('sales', 'SaleController', ['only' => [
-    'index', 'show', 'create'
+    'index', 'show', 'create', 'store'
 ]]);
+
 Route::resource('tickets', 'TicketController', ['only' => [
     'index', 'show'
 ]]);
@@ -148,3 +150,22 @@ Route::get('prices/{price}', [
     'uses' => 'PriceController@destroy',
     'as'   => 'priceDestroy'
 ]);
+
+Auth::routes();
+
+Route::get('auth/login', [
+    'uses'  => 'Auth\LoginController@showLoginForm',
+    'as'    => 'admin.auth.login'
+]);
+
+Route::post('auth/login', [
+    'uses'  => 'Auth\LoginController@login',
+    'as'    => 'admin.auth.login'
+]);
+
+Route::get('auth/logout', [
+    'uses'  => 'Auth\LoginController@logout',
+    'as'    => 'admin.auth.logout'
+]);
+
+Route::get('/home', 'HomeController@index')->name('home');

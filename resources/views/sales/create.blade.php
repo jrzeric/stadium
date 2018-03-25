@@ -9,14 +9,13 @@
 
 @section('main')
 
-<h1>Seats</h1>
-<div id="seatsSubtotal"></div>
-<div id="button" onload="fillSeats">
-  <label for="exampleFormControlSelect2">Select your seats</label>
-  <select multiple class="form-control" id="seats">
-
-  </select>
+<div id="salesTitle">
+  <label id="countTickets"></label>
+  <label id="title"></label>
 </div>
-<div id="subtotal1"></div>
+<label id="js" name="js" hidden></label>
+<div class="salesButton"><a href="{{ route('sales.index') }}" class="btn btn-success">Checkout</a></div>
+<div id="tickets" class="tickets"></div>
+<div id="total"></div>
 
 @endsection
