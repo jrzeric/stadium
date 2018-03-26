@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Event;
+use App\Http\Sale;
+use App\Http\Ticket;
+use DB;
 
 class SaleController extends Controller
 {
@@ -52,21 +55,33 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
-        $tickets = $request->input('js');
+        $tickets = json_decode($request->input('js'));
 
         foreach ($tickets as $ticket) {
-            $eventId = $ticket->title;
+            $event = DB::table('events')
+                            ->select('events.id as eventId')
+                            ->where('events.name', $ticket->title)
+                            ->get();
 
             $sale = new Sale ([
-                'event' => $firstName,
+                'event' => $event[0]->eventId,
                 'dateTime' => date('Y-m-d'),
                 'seller' => session('login')
             ]);
 
             $sale->save();
+
+            $sale = Sale::all()->last();
+
+            $ticket = new Ticket ([
+                'sale' => $sale->id,
+                'seat' => $ticket->seat
+            ]);
+
+            $ticket->save();
         }
 
-        return $array;
+        return redirect()->route('sales.index')->with('status', 'Selled');
     }
 
     /**
@@ -111,6 +126,6 @@ class SaleController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }

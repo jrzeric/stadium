@@ -365,10 +365,10 @@ function printTicketPreview() {
         h2.appendChild(totalInfo);
         totalDiv.appendChild(h2);
 
-/*
+
         var js = document.getElementById('js');
-        js.innerHTML = JSON.stringify(session);
-*/
+        js.value = JSON.stringify(session);
+
     }
 
     //viewChartSelectedSeats();
@@ -426,4 +426,13 @@ function salesSelect() {
 
         printTicketPreview();
     }
+}
+
+function flushSession() {
+    delete sessionStorage.tickets;
+    var sale = document.getElementById('sale');
+    var saleTicket = document.getElementById('saleTicket');
+    console.log('borrado');
+    sale.style.display = 'block';
+    saleTicket.style.display = 'none';
 }

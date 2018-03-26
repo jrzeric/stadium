@@ -25,6 +25,11 @@
             @yield('header')
         </header>
         <main class="main">
+            @if (session('status'))
+                <div class="alert alert-success" onload="flushSession()">
+                    {{ session('status') }}
+                </div>
+            @endif
             <nav id="nav" class="nav" style="visibility: hidden">
                 @yield('nav')
             </nav>
@@ -42,10 +47,11 @@
                   </div>
                   <form action="{{ route('sales.store') }}" method="post">
                       <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                      <label id="js" name="js" hidden></label>
-                      <div class="salesButton text-center"><a href="{{ route('sales.index') }}" class="btn btn-success">Sell</a></div>
-                      <div class="salesButton text-center"><a href="{{ route('sales.index') }}" class="btn btn-danger">Cancel</a></div>
+                      <input id="js" name="js" hidden>
+                      <div class="salesButton text-center"><button type="submit" class="btn btn-primary" onclick="flushSession()">Sell</button></div>
                   </form>
+                      <div class="salesButton text-center"><button type="submit" class="btn btn-danger" onclick="flushSession()">Canel</button></div>
+
                   <div id="tickets" class="tickets"></div>
                   <div id="total"></div>
               </aside>

@@ -9,6 +9,12 @@
 
 @section('main')
 
+@if (session('tickets'))
+    <div class="alert alert-success">
+        {{ session('tickets') }}
+    </div>
+@endif
+
 <div id="salesSelect">
   <h3>Event</h3>
   <select class="form-control" id="eventos" name="eventos">
