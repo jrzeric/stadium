@@ -52,6 +52,12 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        $salt = substr(sha1(date('r')), rand(0, 17), 22);
+        $cost = 10;
+        $hash = '$2y$' . $cost . '$' . $salt;
+        $verify = password_verify($request->input('password'), $hash);
+        //$hashed = crypt($request->input('password'), "$hash");
+
         $user = DB::table('users')
                     ->join('employees', 'users.employee', '=', 'employees.id')
                     ->join('profiles', 'users.profile', '=', 'profiles.id')
@@ -61,7 +67,7 @@ class LoginController extends Controller
                     )
                     ->where([
                       ['users.email', $request->input('email')],
-                      ['users.password', $request->input('password')],
+                      ['users.password', $verify],
                       ['employees.status', 'UP']
                     ])->get();
 

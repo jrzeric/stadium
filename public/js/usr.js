@@ -26,3 +26,45 @@ function asdf(area){
     case '10': $area = "RTP"; break;
   }
 }
+
+function generateUser() {
+    const DOMAINNAME = '@stadium.local.net';
+    // Get data from input
+    var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+
+    if (firstName != '' && lastName != '') {
+        // Assign username
+        var username = firstName.charAt(0).toLowerCase();
+        username += lastName.toLowerCase();
+
+        // Get data from database
+        var users;
+        var x = new XMLHttpRequest();
+        x.open('GET', 'http://stadium.local.net/api/users/', true);
+        x.send();
+
+        x.onreadystatechange = function() {
+          if (x.status == 200 && x.readyState == 4) {
+            users = JSON.parse(x.responseText).users;
+
+            // check if username generated is already taken by other employee
+            var taken = 0;
+            for (var i = 0; i < users.length; i++) {
+              if (users[i].email == (username + DOMAINNAME) || users[i].email == (username + taken + DOMAINNAME)) {
+                  taken++;
+              }
+            }
+            if (taken != 0) {
+              username += taken;
+            }
+
+            var email = document.getElementById('email');
+            email.value = (username + DOMAINNAME);
+          }
+        }
+    } else {
+        var email = document.getElementById('email');
+        email.value = '';
+    }
+}

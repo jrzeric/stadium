@@ -22,18 +22,22 @@
             <th>#</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Email</th>
+            <th>Profile</th>
             <th class="text-center">Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($employees as $i => $employee)
+        @foreach ($users as $i => $user)
             <tr>
                 <td class="align-middle">{{ $i + 1 }}</td>
-                <td class="align-middle">{{ $employee->firstName }}</td>
-                <td class="align-middle">{{ $employee->lastname }}</td>
+                <td class="align-middle">{{ $user->employeesFirstName }}</td>
+                <td class="align-middle">{{ $user->employeesLastName }}</td>
+                <td class="align-middle">{{ $user->usersEmail }}</td>
+                <td class="align-middle">{{ $user->profilesName }}</td>
                 <td class="text-center">
-                    <a href="{{ route('employeeEdit', $employee->id) }}" class="btn btn-primary"><img src="/images/octicons/svg/pencil.svg" alt="" width="20px"></a>
-                    <a href="{{ route('employeeDestroy', $employee->id) }}" class="btn btn-danger"><img src="/images/octicons/svg/trashcan.svg" alt="" width="20px"></a>
+                    <a href="{{ route('employeeEdit', $user->employeesId) }}" class="btn btn-primary"><img src="/images/octicons/svg/pencil.svg" alt="" width="20px"></a>
+                    <a href="{{ route('employeeDestroy', $user->employeesId) }}" class="btn btn-danger"><img src="/images/octicons/svg/trashcan.svg" alt="" width="20px"></a>
                 </td>
             </tr>
         @endforeach

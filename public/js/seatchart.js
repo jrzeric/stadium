@@ -6,9 +6,6 @@ var dataSeats;
 var dataPrices;
 
 function init(eventId, sectionId) {
-  console.log(sessionStorage.section);
-  console.log(sessionStorage.area);
-  console.log("Inicializado");
   this.eventId = eventId;
   this.sectionId = sectionId;
   // evento, seccion
@@ -40,7 +37,7 @@ function getSeatsId(eventId, sectionId) {
 
   // evento, seccion
   // consulta el precio de las butacas en la secccion
-  getPrice(eventId, sectionId);
+  //getPrice(eventId, sectionId);
 }
 
 // sets id's to seats
@@ -49,9 +46,6 @@ function setSeatId(eventId, data) {
   var seats = document.getElementsByClassName("available");
   var seat = 0;
   var seatsJSON = JSONdata.seats;
-  console.log(seatsJSON[1].id);
-
-  console.log(seatsJSON.length);
 
   var elements = document.getElementsByClassName("available");
 
@@ -63,8 +57,6 @@ function setSeatId(eventId, data) {
     //console.log("Id de la BD" + seatsJSON[i].id);
     elements[i].setAttribute("id", seatsJSON[i].id);
   }
-
-  console.log("Evento: " + sessionStorage.event);
 
   // gets all seats bougth from the section
 
@@ -88,27 +80,11 @@ function setSeatId(eventId, data) {
           var selledSeats = JSONdata1.tickets;
           for (var i = 0; i < selledSeats.length; i++)
           {
-            console.log(selledSeats[i].seat.id);
             document.getElementById(selledSeats[i].seat.id).setAttribute("class", "selled");
           }
         }
       }
     }
-}
-
-function getSeatsBougth()
-{
-}
-
-// sets different color to each seat bougth
-function viewSeatsBougth(dataSeats, dataPrices) {
-  var JSONdataSeats = JSON.parse(dataSeats);
-  console.log(JSONdataSeats.seat);
-  var seatId = JSONdataSeats.seat.id;
-  console.log(seatId);
-
-  // change fill color, taked from class 'selled'
-
 }
 
 function setEventSeatsSell() {
@@ -139,7 +115,7 @@ function setAvailableAgain(seat) {
 }
 
 
-function getPrice(eventId, sectionId) {
+/*function getPrice(eventId, sectionId) {
   var x = new XMLHttpRequest();
   x.open('GET', 'http://stadium.local.net/api/prices/event/' + eventId + '/section/'+ sectionId, true);
   x.send();
@@ -152,7 +128,7 @@ function getPrice(eventId, sectionId) {
       precio = price;
     }
   }
-}
+}*/
 
 function setToList(seatId) {
     // Get information about the seat like Row, Column, Section, Area and Number of seat.
@@ -169,7 +145,6 @@ function setToList(seatId) {
       if (seats.status == 200 && seats.readyState == 4) {
         try {
           dataSeats = seats.responseText
-          console.log();
         } catch(e) { }
       }
     }
@@ -178,18 +153,26 @@ function setToList(seatId) {
       if (prices.status == 200 && prices.readyState == 4) {
         try {
           dataPrices = prices.responseText
-          console.log();
         } catch(e) { }
       }
     }
 
-    var JSONdataSeats = JSON.parse(dataSeats);
-    var seat = JSONdataSeats.seat;
-    console.log(seat);
+    try {
+        var JSONdataSeats = JSON.parse(dataSeats);
+        var seat = JSONdataSeats.seat;
+    } catch(e) {
+      console.log('Message: Error retrieving seat ' + seatId + '.');
+      return false;
+    }
 
-    var JSONdataPrices = JSON.parse(dataPrices);
-    var price = JSONdataPrices.price;
-    console.log(price);
+
+    try {
+        var JSONdataPrices = JSON.parse(dataPrices);
+        var price = JSONdataPrices.price;
+    } catch (e) {
+        console.log('Message: No price assigned to this event/section.');
+        return false;
+    }
 
     //delete sessionStorage.tickets;
     // New data
@@ -228,8 +211,6 @@ function setToList(seatId) {
     // Saves all data to session
     data = JSON.stringify(sessionData);
     sessionStorage.setItem("tickets", data);
-
-    console.log(JSON.parse(sessionStorage.getItem('tickets')));
     printTicketPreview();
 }
 
@@ -407,7 +388,6 @@ function deleteFromList(seatId) {
             }
         }
 
-        console.log(session);
         session = JSON.stringify(session);
         sessionStorage.setItem("tickets", session);
 
@@ -432,7 +412,6 @@ function flushSession() {
     delete sessionStorage.tickets;
     var sale = document.getElementById('sale');
     var saleTicket = document.getElementById('saleTicket');
-    console.log('borrado');
     sale.style.display = 'block';
     saleTicket.style.display = 'none';
 }
